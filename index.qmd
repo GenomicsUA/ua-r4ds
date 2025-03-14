@@ -1,7 +1,7 @@
 # Welcome {.unnumbered}
 
-This is the website for the 2nd edition of **"R for Data Science"**.
-This book will teach you how to do data science with R: You'll learn how to get your data into R, get it into the most useful structure, transform it and visualize.
+Це є веб-версія другого видання книги **"R for Data Science"**.
+Ця книга запродаждує вступ до науки про дані із R: ви навчитеся тому, як завантажити дані в R, як надати їм найбільш зручну стуктуру, перетворити і візуалізувати (унаочнити).
 
 In this book, you will find a practicum of skills for data science.
 Just as a chemist learns how to clean test tubes and stock a lab, you'll learn how to clean data and draw plots---and many other things besides.
@@ -19,6 +19,7 @@ If you speak another language, you might be interested in the freely available t
 -   [Italian](https://it.r4ds.hadley.nz)
 -   [Turkish](https://tr.r4ds.hadley.nz)
 -   [Portuguese](https://pt.r4ds.hadley.nz)
+-   [Українська](https://ua.r4ds.hadley.nz)
 
 You can find suggested answers to exercises in the book at <https://mine-cetinkaya-rundel.github.io/r4ds-solutions>.
 
