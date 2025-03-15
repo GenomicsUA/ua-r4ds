@@ -3,11 +3,11 @@
 Це є веб-версія другого видання книги **"R for Data Science"**.
 Ця книга запродаждує вступ до науки про дані із R: ви навчитеся тому, як завантажити дані в R, як надати їм найбільш зручну стуктуру, перетворити і візуалізувати (унаочнити).
 
-In this book, you will find a practicum of skills for data science.
-Just as a chemist learns how to clean test tubes and stock a lab, you'll learn how to clean data and draw plots---and many other things besides.
-These are the skills that allow data science to happen, and here you will find the best practices for doing each of these things with R.
-You'll learn how to use the grammar of graphics, literate programming, and reproducible research to save time.
-You'll also learn how to manage cognitive resources to facilitate discoveries when wrangling, visualizing, and exploring data.
+У цій книжці ви знайдете практикум для відпрацювання навичок в галузі науки про дані.
+Подібно до того, як хімік вчиться мити пробірки та упорядковувати лабораторію, ви навчитеся очищати дані та будувати графіки, а також багато інших речей.
+Це навички, які дозволяють науці про дані відбуватися, і тут ви знайдете найкращі практики для виконання кожної з цих речей за допомогою R.
+Ви дізнаєтеся, як використовувати граматику графіки, грамотно програмувати та відтворювати дослідження для економії часу.
+Ви також дізнаєтеся, як керувати когнітивними ресурсами, щоб сприяти відкриттям під час суперечливих моментів, візуалізації та дослідження даних.
 
 This website is and will always be free, licensed under the [CC BY-NC-ND 3.0](https://creativecommons.org/licenses/by-nc-nd/3.0/us/) License.
 If you'd like a physical copy of the book, you can order it on [Amazon](https://www.amazon.com/dp/1492097403?&tag=hadlwick-20).
