@@ -1,31 +1,31 @@
 # Preface to the second edition {.unnumbered}
 
-Welcome to the second edition of "R for Data Science"!
-This is a major reworking of the first edition, removing material we no longer think is useful, adding material we wish we included in the first edition, and generally updating the text and code to reflect changes in best practices.
-We're also very excited to welcome a new co-author: Mine Çetinkaya-Rundel, a noted data science educator and one of our colleagues at Posit (the company formerly known as RStudio).
+Ласкаво просимо до другого видання «R for Data Science»!
+Це суттєве доопрацювання першого видання, в якому вилучено матеріал, який ми більше не вважаємо корисним. Також додано матеріал, який ми хотіли б включити в перше видання, і загалом оновлено текст і код, щоб відобразити зміни в найкращих практиках.
+Ми також дуже раді вітати нового співавтора: Міне Четінкая-Рундель, відомого викладача науки про дані та одного з наших колег у Posit (компанія, раніше відома як RStudio).
 
-A brief summary of the biggest changes follows:
+Нижче наведено короткий огляд найбільших змін:
 
--   The first part of the book has been renamed to "Whole game".
-    The goal of this section is to give you the rough details of the "whole game" of data science before we dive into the details.
+-   Першу частину книги перейменовано на «Вся гра».
+    Мета цього розділу - дати вам приблизну картину «всієї гри» в науці про дані, перш ніж ми зануримося в деталі.
 
--   The second part of the book is "Visualize".
-    This part gives data visualization tools and best practices a more thorough coverage compared to the first edition.
-    The best place to get all the details is still the [ggplot2 book](http://ggplot2-book.org/), but now R4DS covers more of the most important techniques.
+-   Друга частина книги - «Візуалізувати».
+    У цій частині більш ґрунтовно висвітлено інструменти візуалізації даних та найкращі практики порівняно з першим виданням.
+    Найкращим місцем для отримання всіх деталей все ще залишається [книга ggplot2](http://ggplot2-book.org/), але тепер R4DS охоплює більше найважливіших методів.
 
--   The third part of the book is now called "Transform" and gains new chapters on numbers, logical vectors, and missing values.
-    These were previously parts of the data transformation chapter, but needed much more room to cover all the details.
+-   Третя частина книги тепер називається «Перетворення» і містить нові розділи про числа, логічні вектори та пропущені значення.
+    Раніше ці питання були частиною розділу «Перетворення даних», але потребували значно більшого простору для висвітлення всіх деталей.
 
--   The fourth part of the book is called "Import".
-    It's a new set of chapters that goes beyond reading flat text files to working with spreadsheets, getting data out of databases, working with big data, rectangling hierarchical data, and scraping data from web sites.
+-   Четверта частина книги називається «Імпорт».
+    Це новий набір розділів, який виходить за рамки читання звичайних текстових файлів і включає в себе роботу з електронними таблицями, отримання даних з баз даних, роботу з великими масивами даних, перетворення ієрархічних даних у прямокутні, а також вилучення даних з веб-сайтів.
 
--   The "Program" part remains, but has been rewritten from top-to-bottom to focus on the most important parts of function writing and iteration.
-    Function writing now includes details on how to wrap tidyverse functions (dealing with the challenges of tidy evaluation), since this has become much easier and more important over the last few years.
-    We've added a new chapter on important base R functions that you're likely to see in wild-caught R code.
+-   Частина «Програма» залишилася, але була переписана зверху донизу, щоб зосередитися на найбільш важливих частинах написання функцій та ітерацій.
+    Написання функцій тепер включає детальну інформацію про те, як виконувати tidyverse-функції (вирішувати проблеми оптимізації оцінок), оскільки це стало набагато простіше і важливіше за останні кілька років.
+    Ми додали нову главу про важливі функції базового R, які ви, ймовірно, побачите у «незвичному» R-коді.
 
--   The modeling part has been removed.
-    We never had enough room to fully do modelling justice, and there are now much better resources available.
-    We generally recommend using the [tidymodels](https://www.tidymodels.org/) packages and reading [Tidy Modeling with R](https://www.tmwr.org/) by Max Kuhn and Julia Silge.
+-   Моделююча частина була видалена.
+    У нас ніколи не було достатньо місця, щоб повною мірою забезпечити повноцінне моделювання, а зараз у нас є набагато кращі ресурси.
+    Загалом ми рекомендуємо використовувати пакунки [tidymodels](https://www.tidymodels.org/) та прочитати [Tidy Modeling with R](https://www.tmwr.org/) Макса Куна та Джулії Сілдж (Max Kuhn, Julia Silge).
 
--   The "Communicate" part remains, but has been thoroughly updated to feature [Quarto](https://quarto.org/) instead of R Markdown.
-    This edition of the book has been written in Quarto, and it's clearly the tool of the future.
+-   Частина «Спілкування» залишилася, але була ретельно оновлена і тепер містить [Quarto](https://quarto.org/) замість R Markdown.
+    Це видання книги написано на Quarto, і це, безумовно, інструмент майбутнього.
