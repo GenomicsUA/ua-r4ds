@@ -1,4 +1,4 @@
-# Transform {#sec-transform-intro .unnumbered}
+# Трансформація {#sec-transform-intro .unnumbered}
 
 ```{r}
 #| results: "asis"
@@ -6,45 +6,44 @@
 source("_common.R")
 ```
 
-The second part of the book was a deep dive into data visualization.
-In this part of the book, you'll learn about the most important types of variables that you'll encounter inside a data frame and learn the tools you can use to work with them.
+У другій частині книги ми глибоко занурились в унаочнюваня даних.
+В цій частині книги ви вивчите найбільш важливі типи змінних, які можна зустріти всередині датафрейма і опануєте інструментами, щоб процювати із тими змінними.
 
 ```{r}
 #| label: fig-ds-transform
 #| echo: false
 #| fig-cap: |
-#|   The options for data transformation depend heavily on the type of 
-#|   data involved, the subject of this part of the book.
+#|   Варіанти трасформації даних залежать від типів даних, що є предментом цієї частини книги.
 #| fig-alt: |
-#|   Our data science model, with transform highlighted in blue.
+#|   Схема роботи із даними, стадія трансформація підсвічена блакитним.
 #| out.width: NULL
 
 knitr::include_graphics("diagrams/data-science/transform.png", dpi = 270)
 ```
 
-You can read these chapters as you need them; they're designed to be largely standalone so that they can be read out of order.
+Ви можете читати ці глави, коли вони вам знадобяться; вони створені таким чином, щоб бути здебільшого незалежними, щоб їх можна було читати в будь-якій послідовності.
 
--   @sec-logicals teaches you about logical vectors.
-    These are the simplest types of vectors, but are extremely powerful.
-    You'll learn how to create them with numeric comparisons, how to combine them with Boolean algebra, how to use them in summaries, and how to use them for conditional transformations.
-
+-   @sec-logicals навчить вас щодо логічних векторів.
+    Вони є найпростішими типами векторів, але вони дуже потужні.
+    Ви навчитеся, як створювати вектори за допомогою числових порівнянь, як комбінувати вектори за допомогою Булевої алгербри, як використовувати їх для створення підсумків і умовних трансформацій.
+    
 -   @sec-numbers dives into tools for vectors of numbers, the powerhouse of data science.
-    You'll learn more about counting and a bunch of important transformation and summary functions.
+    Ви навчитеся додатковим способам підрахунку, а також опануєте купу важливих функцій трансформації і створення підсумків.
+    
+-   @sec-strings надасть вам інструменти для роботи із рядками: ви навчитеся розрізати їх на шматки і сшивати знов.
+    Ця глава зосереджена на пакеті stringr, але ви також дізнаєтеся про додаткові функції пакета tidyr, які призначені для витягування даних з символьних рядків.
 
--   @sec-strings will give you the tools to work with strings: you'll slice them, you'll dice them, and you'll stick them back together again.
-    This chapter mostly focuses on the stringr package, but you'll also learn some more tidyr functions devoted to extracting data from character strings.
+-   @sec-regular-expressions дає вступ до регулярних виразів, які я потужним інструментом для обробки рядків.
+    Ця глава просуне вас від того стану, коли ви дивитесь на регулярний вираз і думаєте, що це кіт пройшов по вашій клавіатурі, аж до спроможності читати і створювати складні рядкові шаблони.
 
--   @sec-regular-expressions introduces you to regular expressions, a powerful tool for manipulating strings.
-    This chapter will take you from thinking that a cat walked over your keyboard to reading and writing complex string patterns.
+-   @sec-factors дає вступн до факторів (чинників): цей тип R використовує для категорійних даних.
+    Фактор потрібен, коли змінна має обмежений набір можливих значень, або коли вам потрібно впорядкувати рядок не за абетковим порядком. 
+    
+-   @sec-dates-and-times надасть вам ключові інструменти для роботи із датами і часом.
+    На жаль, чим більше ви вичаєте дати, тим більш складними вони здаються, але за допомогою пакета lubridate ви навчитеся вирішувати найбільш поширені труднощі.
+    
+-   @sec-missing-values обговорює відсутні значення навглибшки.
+    Ми вже обговорювали їх пару разів наодшибі, але зараз прийшов час для цілісного обговорення, щоб з'ясувати різницю між неявними і явними відсутніми значеннями, а також дізнатися як і чому може бути потрібна конвертація між ними.
 
--   @sec-factors introduces factors: the data type that R uses to store categorical data.
-    You use a factor when variable has a fixed set of possible values, or when you want to use a non-alphabetical ordering of a string.
-
--   @sec-dates-and-times will give you the key tools for working with dates and date-times.
-    Unfortunately, the more you learn about date-times, the more complicated they seem to get, but with the help of the lubridate package, you'll learn to how to overcome the most common challenges.
-
--   @sec-missing-values discusses missing values in depth.
-    We've discussed them a couple of times in isolation, but now it's time to discuss them holistically, helping you come to grips with the difference between implicit and explicit missing values, and how and why you might convert between them.
-
--   @sec-joins finishes up this part of the book by giving you tools to join two (or more) data frames together.
-    Learning about joins will force you to grapple with the idea of keys, and think about how you identify each row in a dataset.
+-   @sec-joins закінчує цю частину книги надаючи вам інструменти для поєднування двох (чи більше) датафреймів.
+    Вивчення функцій поєднування змусить вас залучити ідею ключів, і замислитися над тим, як ідентифікувати кожен рядок в датасеті.
