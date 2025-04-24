@@ -1,4 +1,4 @@
-# Logical vectors {#sec-logicals}
+# Логічні вектори {#sec-logicals}
 
 ```{r}
 #| echo: false
@@ -6,20 +6,20 @@
 source("_common.R")
 ```
 
-## Introduction
+## Вступ
 
-In this chapter, you'll learn tools for working with logical vectors.
-Logical vectors are the simplest type of vector because each element can only be one of three possible values: `TRUE`, `FALSE`, and `NA`.
-It's relatively rare to find logical vectors in your raw data, but you'll create and manipulate them in the course of almost every analysis.
+В цій главі ви навчитеся працювати із логічними векторами.
+Логічні вектори є напростішим типом векторів, тому що кожен з елементів вектора може приймати тільки одне з трьох значень: `TRUE`, `FALSE`, and `NA`.
+У сирих, вхідних даних логічні вектори зустрічаються рідко, але вам доведеться створювати і змінювати їх майже в кожному аналізі.
 
-We'll begin by discussing the most common way of creating logical vectors: with numeric comparisons.
-Then you'll learn about how you can use Boolean algebra to combine different logical vectors, as well as some useful summaries.
-We'll finish off with `if_else()` and `case_when()`, two useful functions for making conditional changes powered by logical vectors.
+Ми почнемо з обговорення найбільш поширеного шляху створення логічних векторів: за допомогю числових порівнянь.
+Потім ви навчитеся, як використовувати Булеву алгебру для того, щоб компонувати різні логічні вектори, а також як робити підсумки.
+Мі закінчимо із `if_else()` і `case_when()` - корисними функціями для здійснення умовних змін на основі логічних векторів.
 
-### Prerequisites
+### Передумови
 
-Most of the functions you'll learn about in this chapter are provided by base R, so we don't need the tidyverse, but we'll still load it so we can use `mutate()`, `filter()`, and friends to work with data frames.
-We'll also continue to draw examples from the `nycflights13::flights` dataset.
+Більшість функцій в цій главі є функцями базового R, так що нам не знадобиться бібліотека tidyverse, однак ми все рівно завантажимо її, щоб можна було використовувати `mutate()`, `filter()`, і подібні функцій для роботи із датафреймами.
+Ми також продовжимо робити приклади на основі датасета `nycflights13::flights`.
 
 ```{r}
 #| label: setup
@@ -29,16 +29,16 @@ library(tidyverse)
 library(nycflights13)
 ```
 
-However, as we start to cover more tools, there won't always be a perfect real example.
-So we'll start making up some dummy data with `c()`:
+Оскільки ми починаємо задіювати більше інструментів, в нас не завжди будуть ідеальні приклади з реальними даними.
+Так що ми почнемо створювати штучні дані за допомогою функції `c()`:
 
 ```{r}
 x <- c(1, 2, 3, 5, 7, 11, 13)
 x * 2
 ```
 
-This makes it easier to explain individual functions at the cost of making it harder to see how it might apply to your data problems.
-Just remember that any manipulation we do to a free-floating vector, you can do to a variable inside a data frame with `mutate()` and friends.
+Таким чином легше пояснити, як саме працює та чи інша функція, за рахунок того, що може бути складніше побачити, як застосувати цю фукцію до реальних даних.
+Просто пам'ятайте, що будь яка операція, яку ми можемо застосувати до поодинокого вектора, може бути застосована до змінної всередені датафрейму за допомогою фунції `mutate()` і подібних до неї функції.
 
 ```{r}
 df <- tibble(x)
@@ -46,7 +46,7 @@ df |>
   mutate(y = x * 2)
 ```
 
-## Comparisons
+## Порівняння
 
 A very common way to create a logical vector is via a numeric comparison with `<`, `<=`, `>`, `>=`, `!=`, and `==`.
 So far, we've mostly created logical variables transiently within `filter()` --- they are computed, used, and then thrown away.
@@ -83,7 +83,7 @@ flights |>
   filter(daytime & approx_ontime)
 ```
 
-### Floating point comparison {#sec-fp-comparison}
+### Порявняння із плаваючою комою {#sec-fp-comparison}
 
 Beware of using `==` with numbers.
 For example, it looks like this vector contains the numbers 1 and 2:
@@ -118,7 +118,7 @@ One option is to use `dplyr::near()` which ignores small differences:
 near(x, c(1, 2))
 ```
 
-### Missing values {#sec-na-comparison}
+### Відсутні значення {#sec-na-comparison}
 
 Missing values represent the unknown so they are "contagious": almost any operation involving an unknown value will also be unknown:
 
@@ -188,12 +188,12 @@ flights |>
 
 We'll come back to cover missing values in more depth in @sec-missing-values.
 
-### Exercises
+### Вправи
 
 1.  How does `dplyr::near()` work? Type `near` to see the source code. Is `sqrt(2)^2` near 2?
 2.  Use `mutate()`, `is.na()`, and `count()` together to describe how the missing values in `dep_time`, `sched_dep_time` and `dep_delay` are connected.
 
-## Boolean algebra
+## Булева алгебра
 
 Once you have multiple logical vectors, you can combine them together using Boolean algebra.
 In R, `&` is "and", `|` is "or", `!` is "not", and `xor()` is exclusive or[^logicals-2].
@@ -227,7 +227,7 @@ Don't use them in dplyr functions!
 These are called short-circuiting operators and only ever return a single `TRUE` or `FALSE`.
 They're important for programming, not data science.
 
-### Missing values {#sec-na-boolean}
+### Відсутні значення {#sec-na-boolean}
 
 The rules for missing values in Boolean algebra are a little tricky to explain because they seem inconsistent at first glance:
 
@@ -315,18 +315,18 @@ flights |>
   filter(dep_time %in% c(NA, 0800))
 ```
 
-### Exercises
+### Вправи
 
 1.  Find all flights where `arr_delay` is missing but `dep_delay` is not. Find all flights where neither `arr_time` nor `sched_arr_time` are missing, but `arr_delay` is.
 2.  How many flights have a missing `dep_time`? What other variables are missing in these rows? What might these rows represent?
 3.  Assuming that a missing `dep_time` implies that a flight is cancelled, look at the number of cancelled flights per day. Is there a pattern? Is there a connection between the proportion of cancelled flights and the average delay of non-cancelled flights?
 
-## Summaries {#sec-logical-summaries}
+## Підсумки {#sec-logical-summaries}
 
 The following sections describe some useful techniques for summarizing logical vectors.
 As well as functions that only work specifically with logical vectors, you can also use functions that work with numeric vectors.
 
-### Logical summaries
+### Логічні підсумки
 
 There are two main logical summaries: `any()` and `all()`.
 `any(x)` is the equivalent of `|`; it'll return `TRUE` if there are any `TRUE`'s in `x`.
@@ -366,7 +366,7 @@ flights |>
   )
 ```
 
-### Logical subsetting
+### Логічний піднабір
 
 There's one final use for logical vectors in summaries: you can use a logical vector to filter a single variable to a subset of interest.
 This makes use of the base `[` (pronounced subset) operator, which you'll learn more about in @sec-subset-many.
@@ -406,12 +406,12 @@ flights |>
 
 Also note the difference in the group size: in the first chunk `n()` gives the number of delayed flights per day; in the second, `n()` gives the total number of flights.
 
-### Exercises
+### Вправи
 
 1.  What will `sum(is.na(x))` tell you? How about `mean(is.na(x))`?
 2.  What does `prod()` return when applied to a logical vector? What logical summary function is it equivalent to? What does `min()` return when applied to a logical vector? What logical summary function is it equivalent to? Read the documentation and perform a few experiments.
 
-## Conditional transformations
+## Умовні трансформації
 
 One of the most powerful features of logical vectors are their use for conditional transformations, i.e. doing one thing for condition x, and something different for condition y.
 There are two important tools for this: `if_else()` and `case_when()`.
@@ -533,7 +533,7 @@ flights |>
 
 Be wary when writing this sort of complex `case_when()` statement; my first two attempts used a mix of `<` and `>` and I kept accidentally creating overlapping conditions.
 
-### Compatible types
+### Сумісні типи
 
 Note that both `if_else()` and `case_when()` require **compatible** types in the output.
 If they're not compatible, you'll see errors like this:
@@ -559,7 +559,7 @@ Here are the most important cases that are compatible:
 
 We don't expect you to memorize these rules, but they should become second nature over time because they are applied consistently throughout the tidyverse.
 
-### Exercises
+### Вправи
 
 1.  A number is even if it's divisible by two, which in R you can find out with `x %% 2 == 0`.
     Use this fact and `if_else()` to determine whether each number between 0 and 20 is even or odd.
@@ -571,7 +571,7 @@ We don't expect you to memorize these rules, but they should become second natur
 4.  Write a `case_when()` statement that uses the `month` and `day` columns from `flights` to label a selection of important US holidays (e.g., New Years Day, 4th of July, Thanksgiving, and Christmas).
     First create a logical column that is either `TRUE` or `FALSE`, and then create a character column that either gives the name of the holiday or is `NA`.
 
-## Summary
+## Резюме
 
 The definition of a logical vector is simple because each value must be either `TRUE`, `FALSE`, or `NA`.
 But logical vectors provide a huge amount of power.
