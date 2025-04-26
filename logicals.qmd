@@ -219,14 +219,14 @@ flights |>
 knitr::include_graphics("diagrams/transform.png", dpi = 270)
 ```
 
-As well as `&` and `|`, R also has `&&` and `||`.
-Don't use them in dplyr functions!
-These are called short-circuiting operators and only ever return a single `TRUE` or `FALSE`.
-They're important for programming, not data science.
+Окрім `&` та `|`, R також має оператори `&&` and `||`.
+Не використовуйте їх в функціях dplyr!
+Це так звані оператори обчислення за короткою схемою, і вони завжди повертають єдине значення `TRUE` or `FALSE`.
+Вони важливі для програмування, а для аналізу даних.
 
 ### Відсутні значення {#sec-na-boolean}
 
-The rules for missing values in Boolean algebra are a little tricky to explain because they seem inconsistent at first glance:
+Правила для відсутніх значень в Булевій алгебрі трохи складно пояснити, тому що вони здаються непослідовними на перший погляд:
 
 ```{r}
 df <- tibble(x = c(TRUE, FALSE, NA))
@@ -238,17 +238,17 @@ df |>
   )
 ```
 
-To understand what's going on, think about `NA | TRUE` (`NA` or `TRUE`).
-A missing value in a logical vector means that the value could either be `TRUE` or `FALSE`.
-`TRUE | TRUE` and `FALSE | TRUE` are both `TRUE` because at least one of them is `TRUE`.
-`NA | TRUE` must also be `TRUE` because `NA` can either be `TRUE` or `FALSE`.
-However, `NA | FALSE` is `NA` because we don't know if `NA` is `TRUE` or `FALSE`.
-Similar reasoning applies with `NA & FALSE`.
+Щоб зрозуміти, що відбувається, подумайте про `NA | TRUE` (`NA` або `TRUE`).
+Відсутнє значення в логічному векторі означає, що це значення може бути `TRUE` або `FALSE`.
+Вирази `TRUE | TRUE` і `FALSE | TRUE` обидва  дорівнюють `TRUE`, тому що хоча б одно значення з двох є `TRUE`.
+`NA | TRUE` також повинно бути `TRUE`, тому що `NA` може бути `TRUE` or `FALSE`.
+Однак, `NA | FALSE` є `NA`, тому що ми не знаємо, чи `NA` є `TRUE` або `FALSE`.
+Подібні міркування стосуються `NA & FALSE`.
 
-### Order of operations {#sec-order-operations-boolean}
+### Порядок операцій {#sec-order-operations-boolean}
 
-Note that the order of operations doesn't work like English.
-Take the following code that finds all flights that departed in November or December:
+Зверніть увагу на те, що порядок операцій не працює так, як в мові спілкування.
+Розглянемо наступний код, який знаходить всі рейси, які вилітіли в листопаді або грудні:
 
 ```{r}
 #| eval: false
@@ -257,18 +257,18 @@ flights |>
    filter(month == 11 | month == 12)
 ```
 
-You might be tempted to write it like you'd say in English: "Find all flights that departed in November or December.":
+Виникає спокуса нписати цей код так, як би ми сказали: "Знайти всі рейси, що вілітіли в листопаді або грудні":
 
 ```{r}
 flights |> 
    filter(month == 11 | 12)
 ```
 
-This code doesn't error but it also doesn't seem to have worked.
-What's going on?
-Here, R first evaluates `month == 11` creating a logical vector, which we call `nov`.
-It computes `nov | 12`.
-When you use a number with a logical operator it converts everything apart from 0 to `TRUE`, so this is equivalent to `nov | TRUE` which will always be `TRUE`, so every row will be selected:
+Цей код не видає помилку, але він також і не працює.
+Що трапилось?
+В цьому коді, R спочатку виконує `month == 11` і створює логічний вектор, який ми назвемо `nov`.
+Потім R виконує `nov | 12`.
+Коли ми ставимо число поруч із логічним оператором, R конвертує будь-яке числове значення окрім 0 до `TRUE`, вираз стає еквівалентним до `nov | TRUE`, що завжди є  `TRUE`, тому будуть обрані всі рядки:
 
 ```{r}
 flights |> 
@@ -281,15 +281,15 @@ flights |>
 
 ### `%in%`
 
-An easy way to avoid the problem of getting your `==`s and `|`s in the right order is to use `%in%`.
-`x %in% y` returns a logical vector the same length as `x` that is `TRUE` whenever a value in `x` is anywhere in `y` .
+Є легкий шлях, щоб уникнути проблем з впрорядкуванням операторів `==`s та `|`s - це використання оператора `%in%`.
+`x %in% y` повертає логічний вектор такої самої довжини, що і `x` елементи якого є `TRUE` коли значення з `x` знаходиться в `y` .
 
 ```{r}
 1:12 %in% c(1, 5, 11)
 letters[1:10] %in% c("a", "e", "i", "o", "u")
 ```
 
-So to find all flights in November and December we could write:
+Щоб знайти всі рейси в листопаді і грудні, ми можемо написати:
 
 ```{r}
 #| eval: false
@@ -298,14 +298,14 @@ flights |>
   filter(month %in% c(11, 12))
 ```
 
-Note that `%in%` obeys different rules for `NA` to `==`, as `NA %in% NA` is `TRUE`.
+Зверніть увагу на те, що, на відміну від `==`, `%in%` поводиться інашке із `NA` , так що `NA %in% NA` is `TRUE`.
 
 ```{r}
 c(1, 2, NA) == NA
 c(1, 2, NA) %in% NA
 ```
 
-This can make for a useful shortcut:
+Можна зробити корисне скорочення:
 
 ```{r}
 flights |> 
@@ -314,9 +314,9 @@ flights |>
 
 ### Вправи
 
-1.  Find all flights where `arr_delay` is missing but `dep_delay` is not. Find all flights where neither `arr_time` nor `sched_arr_time` are missing, but `arr_delay` is.
-2.  How many flights have a missing `dep_time`? What other variables are missing in these rows? What might these rows represent?
-3.  Assuming that a missing `dep_time` implies that a flight is cancelled, look at the number of cancelled flights per day. Is there a pattern? Is there a connection between the proportion of cancelled flights and the average delay of non-cancelled flights?
+1.  Знайдіть всі рейси, для яких `arr_delay` відсутнє, але `dep_delay` наявне. Знайдіть всі рейси, де ані `arr_time` ні `sched_arr_time` не є відсутніми, але `arr_delay` є відсутнім.
+2.  Скільки рейсів мають відсутнє `dep_time`? Які ще змінні відсутні в цих рядках? За що можуть відповідати ці рядки?
+3.  Припустимо, що відсутнє значення `dep_time` означає, що рейс скасовано. Перегляньте кількість скасованих рейсів кожного дня. Чи є якась залежність? Чи є зв'язок між долею скасованих рейсів і середньою затримкою рейсів, які не було скасовано?
 
 ## Підсумки {#sec-logical-summaries}
 
