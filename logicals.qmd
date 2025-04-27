@@ -320,18 +320,18 @@ flights |>
 
 ## Підсумки {#sec-logical-summaries}
 
-The following sections describe some useful techniques for summarizing logical vectors.
-As well as functions that only work specifically with logical vectors, you can also use functions that work with numeric vectors.
+Наступні розділи описують деякі способи робити підсумки логічних векторів.
+В додаток до функцій, які працюють тікльи з логічними векторами, ви також можете використовувати функції, які працюють із числовими векторами.
 
 ### Логічні підсумки
 
-There are two main logical summaries: `any()` and `all()`.
-`any(x)` is the equivalent of `|`; it'll return `TRUE` if there are any `TRUE`'s in `x`.
-`all(x)` is equivalent of `&`; it'll return `TRUE` only if all values of `x` are `TRUE`'s.
-Like all summary functions, they'll return `NA` if there are any missing values present, and as usual you can make the missing values go away with `na.rm = TRUE`.
+Існує дві головних функції для логічних підсумків: `any()` and `all()`.
+`any(x)` еквівалентна до `|`; вона повертає `TRUE`, якщо у векторі `x` хоч один елемент є `TRUE`.
+`all(x)` еквівалентна до `&`; вона повертає `TRUE` тільки якщо всі елментри вектора `x` дорівнюють `TRUE`.
+Подібно до всіх функцій підсумовування, ці дві функції повертають  `NA`, якщо хоч один з елементів вектора є відсутнім значенням, і як завжди, ви можете прибрати відсутні значення за допомогою `na.rm = TRUE`.
 
-For example, we could use `all()` and `any()` to find out if every flight was delayed on departure by at most an hour or if any flights were delayed on arrival by five hours or more.
-And using `group_by()` allows us to do that by day:
+Наприклад, ми можемо застосувати `all()` і `any()`, щоб дізнатися, чи кожен рейс був затриманий під час виліту більш ніж на годину, або чи були такі рейси, що були затримані під час прибуття на п'ять годин чи більше.
+Також функція `group_by()` дозволяє нам провести аналіз по кожному дню:
 
 ```{r}
 flights |> 
@@ -343,15 +343,15 @@ flights |>
   )
 ```
 
-In most cases, however, `any()` and `all()` are a little too crude, and it would be nice to be able to get a little more detail about how many values are `TRUE` or `FALSE`.
-That leads us to the numeric summaries.
+У більшості випадків, однак, `any()` і `all()` зададто загальні функції, і було б гарно отримати більш детальну інформацію про те, скільки значень є `TRUE` або `FALSE`.
+Це призводить нас до використання числових підсумків.
 
-### Numeric summaries of logical vectors {#sec-numeric-summaries-of-logicals}
+### Числові підсумки логічних векторів {#sec-numeric-summaries-of-logicals}
 
-When you use a logical vector in a numeric context, `TRUE` becomes 1 and `FALSE` becomes 0.
-This makes `sum()` and `mean()` very useful with logical vectors because `sum(x)` gives the number of `TRUE`s and `mean(x)` gives the proportion of `TRUE`s (because `mean()` is just `sum()` divided by `length()`).
+Коли логічний вектор використовується в числовому контексті, `TRUE` стає 1 і `FALSE` стає 0.
+Це робить `sum()` і `mean()` дуже корисними для логічних векторів, тому що `sum(x)` видає кількість елементів `TRUE` і `mean(x)` видає частку елементів `TRUE` (тому що `mean()` є просто `sum()` розділене на `length()`).
 
-That, for example, allows us to see the proportion of flights that were delayed on departure by at most an hour and the number of flights that were delayed on arrival by five hours or more:
+Це, наприклад, дозволяє нам побачити частку рейсів, які були затримані під час відправлення щонайбільше на час і кількість рейсів, які були затримані під час прибуття на п'ять годин і більше:
 
 ```{r}
 flights |> 
@@ -365,11 +365,11 @@ flights |>
 
 ### Логічний піднабір
 
-There's one final use for logical vectors in summaries: you can use a logical vector to filter a single variable to a subset of interest.
-This makes use of the base `[` (pronounced subset) operator, which you'll learn more about in @sec-subset-many.
+Існує ще один спосіб використання логічних векторів у підсумка: ви можете використовувати логічний вектор, щоб фільтрувати одну змінну до піднабіра, якій вас цікавить.
+Для цього використовується оператор базового R `[` (читається як піднабір), про який ви дізнаєтесь більше детально в розділі @sec-subset-many.
 
-Imagine we wanted to look at the average delay just for flights that were actually delayed.
-One way to do so would be to first filter the flights and then calculate the average delay:
+Уявіть, що ми хочемо подивитись на середню затримку тільки для рейсів, які були затримані.
+Один із способів це зробити буде спочатку відфільтрувати рейси, і потім підрахувати середню затримку:
 
 ```{r}
 flights |> 
@@ -382,13 +382,13 @@ flights |>
   )
 ```
 
-This works, but what if we wanted to also compute the average delay for flights that arrived early?
-We'd need to perform a separate filter step, and then figure out how to combine the two data frames together[^logicals-3].
-Instead you could use `[` to perform an inline filtering: `arr_delay[arr_delay > 0]` will yield only the positive arrival delays.
+Це працює, однак що як ми би ще хотілі підрахувати середню затримку рейсів, які прибули завчасно?
+Нам знадобиться окрема стадія фільтрації, і потім ще з'ясувати, як скласти два дата фрейми разом [^logicals-3].
+Замість цього ми можемо вжити `[`, щоб здійснити вбудовану фільтрацію: `arr_delay[arr_delay > 0]` поверне тільки позитивні затримки прибуття.
 
-[^logicals-3]: We'll cover this in @sec-joins.
+[^logicals-3]: Ми розглянемо це в розділі @sec-joins.
 
-This leads to:
+Це призводить до :
 
 ```{r}
 flights |> 
@@ -401,12 +401,12 @@ flights |>
   )
 ```
 
-Also note the difference in the group size: in the first chunk `n()` gives the number of delayed flights per day; in the second, `n()` gives the total number of flights.
+Також зверніть увагу на різницію в розмірі групи: в першому фрагменті кода `n()` видає кількість затриманих рейсів кожного дня; у другому фрагменті `n()` видає зазгальну кількість рейсів.
 
 ### Вправи
 
-1.  What will `sum(is.na(x))` tell you? How about `mean(is.na(x))`?
-2.  What does `prod()` return when applied to a logical vector? What logical summary function is it equivalent to? What does `min()` return when applied to a logical vector? What logical summary function is it equivalent to? Read the documentation and perform a few experiments.
+1.  Що видасть `sum(is.na(x))`? А що до `mean(is.na(x))`?
+2.  Що видає функція `prod()`, якщо її застосувати до логічного вектора? До якої логічної функції підсумку вона є еквівалентною? Що видає функція `min()`, якщо її застосувати до логічного вектору? До якої логічної функції підсумку вона є еквівалентною? Прочитайде документацію дощо цих функцій і зробіть декілька експериментів.
 
 ## Умовні трансформації
 
