@@ -410,39 +410,39 @@ flights |>
 
 ## Умовні трансформації
 
-One of the most powerful features of logical vectors are their use for conditional transformations, i.e. doing one thing for condition x, and something different for condition y.
-There are two important tools for this: `if_else()` and `case_when()`.
+Одною з найбільш потужних можливостей використання логічних векторів є їх застосування в умовних трансформаціях, тобто щоб зробити одну операцію для умови x, і щось інше для умови y.
+Для цього є два важливих інструменти: `if_else()` and `case_when()`.
 
 ### `if_else()`
 
-If you want to use one value when a condition is `TRUE` and another value when it's `FALSE`, you can use `dplyr::if_else()`[^logicals-4].
-You'll always use the first three argument of `if_else()`. The first argument, `condition`, is a logical vector, the second, `true`, gives the output when the condition is true, and the third, `false`, gives the output if the condition is false.
+Якщо вам потрібно використати одне значення, коли умова дорівнює `TRUE` і інше значення, коли умова дорівнює `FALSE`, ви можете використати `dplyr::if_else()`[^logicals-4].
+Перші три аргументи функції `if_else()` є обов'язковими. Перший аргумент, `condition`, є логічним вектором, другий, `true`, задає результат функції, ящо умовний вираз дорівнює TRUE, і  `false` задає результат функції, коли умовний вираз є FALSE.
 
-[^logicals-4]: dplyr's `if_else()` is very similar to base R's `ifelse()`.
-    There are two main advantages of `if_else()`over `ifelse()`: you can choose what should happen to missing values, and `if_else()` is much more likely to give you a meaningful error if your variables have incompatible types.
-
-Let's begin with a simple example of labeling a numeric vector as either "+ve" (positive) or "-ve" (negative):
+[^logicals-4]: Функція `if_else()` з пакету dplyr дуже схожа на функцію `ifelse()` із базового R.
+  `if_else()` має дві головні переваги над `ifelse()`: ви можете задати, як будуть оброблятися відсутні значення, а також `if_else()` скоріш за все видасть більш змістовну помилку, якщо ваші змінні мають несумісні типи.
+  
+Почнему з простого прикладу маркування елементів числового вектора як "+ve" (позитивні) or "-ve" (негативні):
 
 ```{r}
 x <- c(-3:3, NA)
 if_else(x > 0, "+ve", "-ve")
 ```
 
-There's an optional fourth argument, `missing` which will be used if the input is `NA`:
+Факультативний четвертих агрумент `missing` задає значення на випадок, коли на вході `NA`:
 
 ```{r}
 if_else(x > 0, "+ve", "-ve", "???")
 ```
 
-You can also use vectors for the `true` and `false` arguments.
-For example, this allows us to create a minimal implementation of `abs()`:
+Також можна використовувати вектори в аргументах `true` і `false`.
+Наприклад, так можна дуже просто реалізувати функцію `abs()`:
 
 ```{r}
 if_else(x < 0, -x, x)
 ```
 
-So far all the arguments have used the same vectors, but you can of course mix and match.
-For example, you could implement a simple version of `coalesce()` like this:
+Поки що всі аргументи задавалися тим самим вектором, але звичайно ви можете використовувати різні.
+Наприклад, можна написати просту версію функції `coalesce()` наступним чином:
 
 ```{r}
 x1 <- c(NA, 1, 2, NA)
@@ -450,24 +450,24 @@ y1 <- c(3, NA, 4, 6)
 if_else(is.na(x1), y1, x1)
 ```
 
-You might have noticed a small infelicity in our labeling example above: zero is neither positive nor negative.
-We could resolve this by adding an additional `if_else()`:
+Можливо ви помітили невелику помилку в попередньому коді: нуль в був ані позитивним, ані негативним.
+Ми можемо вирішити цю проблему, якщо додамо додатковий `if_else()`:
 
 ```{r}
 if_else(x == 0, "0", if_else(x < 0, "-ve", "+ve"), "???")
 ```
 
-This is already a little hard to read, and you can imagine it would only get harder if you have more conditions.
-Instead, you can switch to `dplyr::case_when()`.
+Цей код все буде трішки важко прочитати, а якщо дотасти більше умов, то код стане ще більш заплутаним.
+Замість цього, ми можемо перемкнутися на функцію `dplyr::case_when()`.
 
 ### `case_when()`
 
-dplyr's `case_when()` is inspired by SQL's `CASE` statement and provides a flexible way of performing different computations for different conditions.
-It has a special syntax that unfortunately looks like nothing else you'll use in the tidyverse.
-It takes pairs that look like `condition ~ output`.
-`condition` must be a logical vector; when it's `TRUE`, `output` will be used.
+Функція `case_when()` пакету dplyr походить із вираза `CASE` мови SQL, вона забезпечує гнучкий спосіб здійснити різні обчислення за різних умов.
+На жаль вона має спеціальний синтаксис, який не схожий ані на що інше в бібліотеці tidyverse.
+Функція потребує завдання пар `condition ~ output`.
+`condition` має бути логічним вектором; коли значення `TRUE`, то буде задіяний `output`.
 
-This means we could recreate our previous nested `if_else()` as follows:
+Ми можемо записати попередній приклад вкладеного  `if_else()` наступним чином:
 
 ```{r}
 x <- c(-3:3, NA)
@@ -479,10 +479,10 @@ case_when(
 )
 ```
 
-This is more code, but it's also more explicit.
+Це займає більше коду, але він більш явний.
 
-To explain how `case_when()` works, let's explore some simpler cases.
-If none of the cases match, the output gets an `NA`:
+Щоб пояснити, як працює `case_when()`, давайте розглянемо деякі прості випадки.
+Якщо жодна умова не співпадає, то на виході отримуємо `NA`:
 
 ```{r}
 case_when(
@@ -491,7 +491,7 @@ case_when(
 )
 ```
 
-Use `.default` if you want to create a "default"/catch all value:
+Задійте `.default`, якщо вам потрібно створити стандартне значення:
 
 ```{r}
 case_when(
@@ -501,7 +501,7 @@ case_when(
 )
 ```
 
-And note that if multiple conditions match, only the first will be used:
+Зверніть увагу, якщо задовільняються багато умов, то буде задіяна тільки перша:
 
 ```{r}
 case_when(
@@ -510,25 +510,25 @@ case_when(
 )
 ```
 
-Just like with `if_else()` you can use variables on both sides of the `~` and you can mix and match variables as needed for your problem.
-For example, we could use `case_when()` to provide some human readable labels for the arrival delay:
+Так само як із `if_else()` можна використовувати змінні з обох боків `~` і ви можете змішувати та поєднувати змінні, як потрібно у вашому випадку.
+Наприклад, ми можемо використати `case_when()` що запровадити деякі зручні для прочитання позначки для затримки прибуття рейсів:
 
 ```{r}
 flights |> 
   mutate(
     status = case_when(
-      is.na(arr_delay)      ~ "cancelled",
-      arr_delay < -30       ~ "very early",
-      arr_delay < -15       ~ "early",
-      abs(arr_delay) <= 15  ~ "on time",
-      arr_delay < 60        ~ "late",
-      arr_delay < Inf       ~ "very late",
+      is.na(arr_delay)      ~ "відміна",
+      arr_delay < -30       ~ "дуже рано",
+      arr_delay < -15       ~ "рано",
+      abs(arr_delay) <= 15  ~ "вчасно",
+      arr_delay < 60        ~ "пізно",
+      arr_delay < Inf       ~ "дуже пізно",
     ),
     .keep = "used"
   )
 ```
 
-Be wary when writing this sort of complex `case_when()` statement; my first two attempts used a mix of `<` and `>` and I kept accidentally creating overlapping conditions.
+Будьте обережні, коли сворюєте такі складні вирази `case_when()`; мої перші спроби мали суміш `<` і `>` і я продовжував створювати умовні вирази, які перетиналися.
 
 ### Сумісні типи
 
