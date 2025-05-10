@@ -1,4 +1,4 @@
-# Numbers {#sec-numbers}
+# Числа {#sec-numbers}
 
 ```{r}
 #| echo: false
@@ -6,7 +6,7 @@
 source("_common.R")
 ```
 
-## Introduction
+## Вступ
 
 Numeric vectors are the backbone of data science, and you've already used them a bunch of times earlier in the book.
 Now it's time to systematically survey what you can do with them in R, ensuring that you're well situated to tackle any future problem involving numeric vectors.
@@ -15,11 +15,11 @@ We'll start by giving you a couple of tools to make numbers if you have strings,
 Then we'll dive into various numeric transformations that pair well with `mutate()`, including more general transformations that can be applied to other types of vectors, but are often used with numeric vectors.
 We'll finish off by covering the summary functions that pair well with `summarize()` and show you how they can also be used with `mutate()`.
 
-### Prerequisites
+### Передумови
 
-This chapter mostly uses functions from base R, which are available without loading any packages.
-But we still need the tidyverse because we'll use these base R functions inside of tidyverse functions like `mutate()` and `filter()`.
-Like in the last chapter, we'll use real examples from nycflights13, as well as toy examples made with `c()` and `tribble()`.
+В цьому розділі нам вистачить функцій базового R, вони доступні без завантаження додаткових пакетів.
+Однак ми вживатимемо функції базового R всередині функцій `mutate()` and `filter()` бібліотеки tidyverse, тож ми потребуємо цієї бібліотеки.
+Як і в попередньому розділі, ми застосуємо реальні приклади з датафреймом nycflights13, а також тестові приклади, створені за допомогою `c()` і `tribble()`.
 
 ```{r}
 #| label: setup
@@ -29,48 +29,47 @@ library(tidyverse)
 library(nycflights13)
 ```
 
-## Making numbers
+## Створення чисел
 
-In most cases, you'll get numbers already recorded in one of R's numeric types: integer or double.
-In some cases, however, you'll encounter them as strings, possibly because you've created them by pivoting from column headers or because something has gone wrong in your data import process.
+У більшості випадків ваші числа вже записані в одному з числових типів R: integer або double. 
+Однак іноді ви можете зіткнутися з числами у вигляді рядків — можливо, через те, що ви створили їх, 
+перетворюючи заголовки стовпців, або через помилку у процесі імпорту даних.
 
-readr provides two useful functions for parsing strings into numbers: `parse_double()` and `parse_number()`.
-Use `parse_double()` when you have numbers that have been written as strings:
+Пакет readr надає дві корисні функції для перетворення рядків у числа: parse_double() та parse_number(). Використовуйте parse_double() у випадках, коли у вас є числа, записані у вигляді рядків:
 
 ```{r}
 x <- c("1.2", "5.6", "1e3")
 parse_double(x)
 ```
 
-Use `parse_number()` when the string contains non-numeric text that you want to ignore.
-This is particularly useful for currency data and percentages:
+parse_number() підходить, коли рядок містить нечисловий текст, який потрібно ігнорувати. Це особливо корисно для даних про валюту та відсотки:
 
 ```{r}
 x <- c("$1,234", "USD 3,513", "59%")
 parse_number(x)
 ```
 
-## Counts {#sec-counts}
+## Підрахунки {#sec-counts}
 
-It's surprising how much data science you can do with just counts and a little basic arithmetic, so dplyr strives to make counting as easy as possible with `count()`.
-This function is great for quick exploration and checks during analysis:
+Вражає, скільки аналізів даних можна зробити лише за допомогою підрахунків і базової арифметики, тому пакет dplyr робить підрахунки якомога простішим із фукцією count(). Ця 
+функція чудово підходить для швидкого дослідження даних та перевірки під час аналізу:
 
 ```{r}
 flights |> count(dest)
 ```
 
 (Despite the advice in @sec-workflow-style, we usually put `count()` on a single line because it's usually used at the console for a quick check that a calculation is working as expected.)
+(Попри рекомендації в @sec-workflow-style, ми записуємо count() в тому ж рядку, оскільки ця функція часто використовується в консолі для швидкої перевірки правильності розрахунку.)
 
-If you want to see the most common values, add `sort = TRUE`:
+Якщо ви хочете вивести найчастіші значення, додайте `sort = TRUE`:
 
 ```{r}
 flights |> count(dest, sort = TRUE)
 ```
 
-And remember that if you want to see all the values, you can use `|> View()` or `|> print(n = Inf)`.
+Якщо ви хочете переглянути всі значення, напишіть `|> View()` або `|> print(n = Inf)`.
 
-You can perform the same computation "by hand" with `group_by()`, `summarize()` and `n()`.
-This is useful because it allows you to compute other summaries at the same time:
+Ту саму операцію можна виконати "вручну" за допомогою функцій `group_by()`, `summarize()` та `n()`. Це корисно, оскільки дозволяє одночасно обчислювати й інші підсумкові значення:
 
 ```{r}
 flights |> 
@@ -81,8 +80,8 @@ flights |>
   )
 ```
 
-`n()` is a special summary function that doesn't take any arguments and instead accesses information about the "current" group.
-This means that it only works inside dplyr verbs:
+`n()` — це спеціальна підсумкова функція, яка не приймає жодних аргументів, а натомість виводить інформацію про "поточну" групу.
+Це означає, що вона працює тільки всередині інших дієслів dplyr:
 
 ```{r}
 #| error: true
@@ -90,10 +89,9 @@ This means that it only works inside dplyr verbs:
 n()
 ```
 
-There are a couple of variants of `n()` and `count()` that you might find useful:
+Існує пара варіантів фунцій `n()` та `count()`:
 
--   `n_distinct(x)` counts the number of distinct (unique) values of one or more variables.
-    For example, we could figure out which destinations are served by the most carriers:
+-   `n_distinct(x)` підраховує кількість унікальних значень однієї або кількох змінних. Наприклад, ми можемо визначити, які напрямки обслуговуються найбільшою кількістю перевізників:
 
     ```{r}
     flights |> 
@@ -102,8 +100,7 @@ There are a couple of variants of `n()` and `count()` that you might find useful
       arrange(desc(carriers))
     ```
 
--   A weighted count is a sum.
-    For example you could "count" the number of miles each plane flew:
+-   Зважений підрахунок — це сума. Наприклад, ви можете підрахувати кількість миль, які пролетів кожен літак:
 
     ```{r}
     flights |> 
@@ -111,15 +108,15 @@ There are a couple of variants of `n()` and `count()` that you might find useful
       summarize(miles = sum(distance))
     ```
 
-    Weighted counts are a common problem so `count()` has a `wt` argument that does the same thing:
+    Робити підсумки — це поширена задача, тому count() має аргумент wt, який виконує ту саму функцію:    
 
     ```{r}
     #| results: false
     flights |> count(tailnum, wt = distance)
     ```
 
--   You can count missing values by combining `sum()` and `is.na()`.
-    In the `flights` dataset this represents flights that are cancelled:
+-   Можна порахувати відсутні значення шляхом поєднання `sum()` і `is.na()`.
+    В датасеті `flights` це будуть скасовані рейси:
 
     ```{r}
     flights |> 
@@ -127,15 +124,15 @@ There are a couple of variants of `n()` and `count()` that you might find useful
       summarize(n_cancelled = sum(is.na(dep_time))) 
     ```
 
-### Exercises
+### Вправи
 
-1.  How can you use `count()` to count the number of rows with a missing value for a given variable?
-2.  Expand the following calls to `count()` to instead use `group_by()`, `summarize()`, and `arrange()`:
+1.  Як можна застосувати count() для підрахунку кількості рядків із відсутнім значенням для певної змінної?
+2.  Перепишіть наступні виклики `count()`, щоб замість цього використати `group_by()`, `summarize()`, and `arrange()`:
     1.  `flights |> count(dest, sort = TRUE)`
 
     2.  `flights |> count(tailnum, wt = distance)`
 
-## Numeric transformations
+## Числові транформації
 
 Transformation functions work well with `mutate()` because their output is the same length as the input.
 The vast majority of transformation functions are already built into base R.
@@ -182,7 +179,7 @@ And unfortunately there's no warning because `flights` has an even number of row
 To protect you from this type of silent failure, most tidyverse functions use a stricter form of recycling that only recycles single values.
 Unfortunately that doesn't help here, or in many other cases, because the key computation is performed by the base R function `==`, not `filter()`.
 
-### Minimum and maximum
+### Мінімум і максимум
 
 The arithmetic functions work with pairs of variables.
 Two closely related functions are `pmin()` and `pmax()`, which when given two or more variables will return the smallest or largest value in each row:
@@ -213,7 +210,7 @@ df |>
   )
 ```
 
-### Modular arithmetic
+### Модульна арифметика
 
 Modular arithmetic is the technical name for the type of math you did before you learned about decimal places, i.e. division that yields a whole number and a remainder.
 In R, `%/%` does integer division and `%%` computes the remainder:
@@ -259,7 +256,7 @@ flights |>
   geom_point(aes(size = n))
 ```
 
-### Logarithms
+### Логарифми
 
 Logarithms are an incredibly useful transformation for dealing with data that ranges across multiple orders of magnitude and converting exponential growth to linear growth.
 In R, you have a choice of three logarithms: `log()` (the natural log, base e), `log2()` (base 2), and `log10()` (base 10).
