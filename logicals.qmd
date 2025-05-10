@@ -532,8 +532,8 @@ flights |>
 
 ### Сумісні типи
 
-Note that both `if_else()` and `case_when()` require **compatible** types in the output.
-If they're not compatible, you'll see errors like this:
+Зверніть увагу на те, що обидві функції `if_else()` і `case_when()` потребують даних **сумісних** типів у виводі.
+Якщо вони не сумісні, то ви побачите повідомлення про помилку:
 
 ```{r}
 #| error: true
@@ -546,35 +546,35 @@ case_when(
 )
 ```
 
-Overall, relatively few types are compatible, because automatically converting one type of vector to another is a common source of errors.
-Here are the most important cases that are compatible:
+Взагалі, відносно небагато типів є сумісними, тому що автоматична конвертація векторів одного типу до іншого є поширеним джерелом помилок.
+Перелічимо найбільш важливі випадки сумісності:
 
--   Numeric and logical vectors are compatible, as we discussed in @sec-numeric-summaries-of-logicals.
--   Strings and factors (@sec-factors) are compatible, because you can think of a factor as a string with a restricted set of values.
--   Dates and date-times, which we'll discuss in @sec-dates-and-times, are compatible because you can think of a date as a special case of date-time.
--   `NA`, which is technically a logical vector, is compatible with everything because every vector has some way of representing a missing value.
+-   Чисельні і логічні вектори є сумісними, ми це обговорювали в розділі @sec-numeric-summaries-of-logicals.
+-   Рядки і чинники (@sec-factors) є сумісними, тому що чинник - це рядок із обмеженою кількістю значень.
+-   Типи дата і дата-час, як ми обговоримо в розділі @sec-dates-and-times, є сумісними, тому що дата є спеціальним випадком дати-часу.
+-   відсутнє значення `NA`, що технічно є логічним вектором, сумісно із будь-чим, тому що будь-який вектор має спосіб зберігати відсутнє значення.
 
-We don't expect you to memorize these rules, but they should become second nature over time because they are applied consistently throughout the tidyverse.
+Ми не очікуємо, що ви запам'ятаєте ці правила, але вони з часом повинні стати вашою другою натурою, тому що вони послідовно застосовуються в бібліотеці tidyverse.
 
 ### Вправи
 
-1.  A number is even if it's divisible by two, which in R you can find out with `x %% 2 == 0`.
-    Use this fact and `if_else()` to determine whether each number between 0 and 20 is even or odd.
+1.  Число є парним, якщо воно ділиться на два, що можна перевірити в R за допомогою `x %% 2 == 0`.
+    Застосуйте це визначення і функцію `if_else()`, щоб для кожного числа від 0 до 20 з'ясувати, чи є воно парним чи непарним.
 
-2.  Given a vector of days like `x <- c("Monday", "Saturday", "Wednesday")`, use an `if_else()` statement to label them as weekends or weekdays.
+2.  Маючи на вході вектор назв днів тижня `x <- c("Monday", "Saturday", "Wednesday")`, за допомогою функції `if_else()` виведіть, чи вони є робочими або вихідними днями.
 
-3.  Use `if_else()` to compute the absolute value of a numeric vector called `x`.
+3.  За допомогою `if_else()` обчисліть абсолютне значення числового вектора `x`.
 
-4.  Write a `case_when()` statement that uses the `month` and `day` columns from `flights` to label a selection of important US holidays (e.g., New Years Day, 4th of July, Thanksgiving, and Christmas).
-    First create a logical column that is either `TRUE` or `FALSE`, and then create a character column that either gives the name of the holiday or is `NA`.
+4.  Напишіть вираз `case_when()`, який отримає на вхід стовпчики `month` і `day` із датафрейму `flights` і позначить набір важливих Українських свят(Різдво, Новий Рік, День 
+    Незалежності). Спочатку створіть логічний стовпичк із значеннями `TRUE` або `FALSE`, а потім створіть символьний стовпчик, в якому буде або назва свята, або `NA`.
 
-## Резюме
+## Підсумок
 
-The definition of a logical vector is simple because each value must be either `TRUE`, `FALSE`, or `NA`.
-But logical vectors provide a huge amount of power.
-In this chapter, you learned how to create logical vectors with `>`, `<`, `<=`, `>=`, `==`, `!=`, and `is.na()`, how to combine them with `!`, `&`, and `|`, and how to summarize them with `any()`, `all()`, `sum()`, and `mean()`.
-You also learned the powerful `if_else()` and `case_when()` functions that allow you to return values depending on the value of a logical vector.
+Визначення логічного вектора є простим, тому що кожне значення повинно бути `TRUE`, `FALSE`, або `NA`.
+Але логічні вектори є дуже потужним інструментом.
+В цій главі, ви навчилися створювати логічні вектори за допомогою `>`, `<`, `<=`, `>=`, `==`, `!=`, та `is.na()`, навчилися комбінувати їх за допомогою `!`, `&`, і `|`, а також навчилися робити підсумки за допомогою `any()`, `all()`, `sum()`, and `mean()`.
+Також ви вивчили потужні функції `if_else()` і `case_when()`, які повертають значення в залежності від значень логічного вектора.
 
-We'll see logical vectors again and again in the following chapters.
-For example in @sec-strings you'll learn about `str_detect(x, pattern)` which returns a logical vector that's `TRUE` for the elements of `x` that match the `pattern`, and in @sec-dates-and-times you'll create logical vectors from the comparison of dates and times.
-But for now, we're going to move onto the next most important type of vector: numeric vectors.
+В наступних главах ви побачите логічні вектори знов і знов.
+Наприклад, в розіділ @sec-strings ви дізнаєтесь про функцію `str_detect(x, pattern)`, яка повертає логічних вектор, елементи якого є `TRUE` для тих елементів вектору `x`, які співпадають із шаблоном`pattern`, а в розділі @sec-dates-and-times ви навчитеся створювати логічні вектори для порівняння дат і часу.
+А зараз ми переходимо до наступного дуже важливого типу векторів: числових векторів.
