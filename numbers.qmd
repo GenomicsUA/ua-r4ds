@@ -8,12 +8,13 @@ source("_common.R")
 
 ## Вступ
 
-Numeric vectors are the backbone of data science, and you've already used them a bunch of times earlier in the book.
-Now it's time to systematically survey what you can do with them in R, ensuring that you're well situated to tackle any future problem involving numeric vectors.
+Числові вектори — це хребет наук про дані, і ми вже користувалися ними багато разів. Тепер ми систематично розглянемо функції роботи із числовими векторами в R, щоб ви могли розв'язувати будь-які проблеми, пов’язані із числовими векторами.
 
-We'll start by giving you a couple of tools to make numbers if you have strings, and then going into a little more detail of `count()`.
-Then we'll dive into various numeric transformations that pair well with `mutate()`, including more general transformations that can be applied to other types of vectors, but are often used with numeric vectors.
-We'll finish off by covering the summary functions that pair well with `summarize()` and show you how they can also be used with `mutate()`.
+Ми почнемо з пари функцій, які перетворюють рядки на числові вектори, а потім детальніше розглянемо функцію count().
+
+Далі ми зануримося в числові трансформації, які добре працюють разом із mutate(), в тому числі розглянемо і більш загальні перетворення, що застосовуються й до інших типів векторів.
+
+Ми закінчемо главу на функціях підсумовування, які працюють разом із summarize(), і покажемо, як їх можна використовувати разом із mutate().
 
 ### Передумови
 
@@ -58,7 +59,6 @@ parse_number(x)
 flights |> count(dest)
 ```
 
-(Despite the advice in @sec-workflow-style, we usually put `count()` on a single line because it's usually used at the console for a quick check that a calculation is working as expected.)
 (Попри рекомендації в @sec-workflow-style, ми записуємо count() в тому ж рядку, оскільки ця функція часто використовується в консолі для швидкої перевірки правильності розрахунку.)
 
 Якщо ви хочете вивести найчастіші значення, додайте `sort = TRUE`:
@@ -127,41 +127,45 @@ n()
 ### Вправи
 
 1.  Як можна застосувати `count()` для підрахунку кількості рядків із відсутнім значенням для певної змінної?
-2.  Перепишіть наступні виклики `count()`, щоб замість цього використати `group_by()`, `summarize()`, and `arrange()`:
+2.  Перепишіть наступні виклики функції `count()`, щоб замість нєї використати `group_by()`, `summarize()`, і `arrange()`:
     1.  `flights |> count(dest, sort = TRUE)`
 
     2.  `flights |> count(tailnum, wt = distance)`
 
 ## Числові транформації
 
-Transformation functions work well with `mutate()` because their output is the same length as the input.
-The vast majority of transformation functions are already built into base R.
-It's impractical to list them all so this section will show the most useful ones.
-As an example, while R provides all the trigonometric functions that you might dream of, we don't list them here because they're rarely needed for data science.
+У функцій трансформації вектор вивіду має таку саму довжину як і вектор ввіду, тому вони підходять до використання у `mutate()`
 
-### Arithmetic and recycling rules {#sec-recycling}
+Більша частина функцій трансформації вбудована в базовий R. Їх забагато, щоб перелічувати все в цьому розділі, тож ми розглянемо найбільш корисні.
+Наприклад, хоча R містить всі тригонометричні фунції, які ви тільки можете уявити, ми не будемо їх перелічувати, тому що вони рідко використовуються в аналізі даних.
 
-We introduced the basics of arithmetic (`+`, `-`, `*`, `/`, `^`) in @sec-workflow-basics and have used them a bunch since.
-These functions don't need a huge amount of explanation because they do what you learned in grade school.
-But we need to briefly talk about the **recycling rules** which determine what happens when the left and right hand sides have different lengths.
-This is important for operations like `flights |> mutate(air_time = air_time / 60)` because there are 336,776 numbers on the left of `/` but only one on the right.
+### Арифметичні операції та правила рециркуляції векторів {#sec-recycling}
 
-R handles mismatched lengths by **recycling,** or repeating, the short vector.
-We can see this in operation more easily if we create some vectors outside of a data frame:
+Ми познайомились із аріфметичними операціяїми (`+`, `-`, `*`, `/`, `^`) в розділі @sec-workflow-basics і с тих пір багато їх застосовували.
+Ці функції не потребують пояснень, тому що ви вивчили їх у школі.
+Але нам потрібно зупинитися на **правилах рециркуляції**, які визначають, що відбувається, коли вектори ліворуч і праворуч від оператора присвоєння мають різну довжину.
+Це важливо для операцій типу `flights |> mutate(air_time = air_time / 60)`, тому що ліворуч від `/` вектор має 336,776 чисел, а праворуч - тільки одно. 
+
+R вирішує невідповідність довжин векторів шляхом *рециркуляції,* або елементів коротшого вектора.
+Ми можемо побачити це в дії, якщо створемо вектори поза межами датафрейму:
 
 ```{r}
 x <- c(1, 2, 10, 20)
 x / 5
-# is shorthand for
+#> [1] 0.2 0.4 2.0 4.0
+# є скороченням для
 x / c(5, 5, 5, 5)
 ```
-
-Generally, you only want to recycle single numbers (i.e. vectors of length 1), but R will recycle any shorter length vector.
-It usually (but not always) gives you a warning if the longer vector isn't a multiple of the shorter:
+Загалом, бажано рециркулювати лише окремі числа (вектори довжиною 1), але R рециркулюватиме будь-який вектор меншої довжини.
+Якщо довжина довшого вектора не є кратною довжині коротшого вектора, R зазвичай (але не завжди) видає попередження:
 
 ```{r}
 x * c(1, 2)
+#> [1]  1  4 10 40
 x * c(1, 2, 3)
+#> Warning in x * c(1, 2, 3): longer object length is not a multiple of shorter
+#> object length
+#> [1]  1  4 30 20
 ```
 
 These recycling rules are also applied to logical comparisons (`==`, `<`, `<=`, `>`, `>=`, `!=`) and can lead to a surprising result if you accidentally use `==` instead of `%in%` and the data frame has an unfortunate number of rows.
