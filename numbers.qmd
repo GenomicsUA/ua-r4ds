@@ -152,7 +152,6 @@ R вирішує невідповідність довжин векторів ш
 ```{r}
 x <- c(1, 2, 10, 20)
 x / 5
-#> [1] 0.2 0.4 2.0 4.0
 # є скороченням для
 x / c(5, 5, 5, 5)
 ```
@@ -161,32 +160,29 @@ x / c(5, 5, 5, 5)
 
 ```{r}
 x * c(1, 2)
-#> [1]  1  4 10 40
 x * c(1, 2, 3)
-#> Warning in x * c(1, 2, 3): longer object length is not a multiple of shorter
-#> object length
-#> [1]  1  4 30 20
 ```
 
-These recycling rules are also applied to logical comparisons (`==`, `<`, `<=`, `>`, `>=`, `!=`) and can lead to a surprising result if you accidentally use `==` instead of `%in%` and the data frame has an unfortunate number of rows.
-For example, take this code which attempts to find all flights in January and February:
+Правила рециркуляції також застосовуються до логічних порівнянь (`==`, `<`, `<=`, `>`, `>=`, `!=`), які можуть призводити до неочікуваного результата: якщо ви ненавмисно застосуєте операцію `==` замість `%in%` і вам ще й не пощастить із кількістю рядків в датафреймі.
+Наприклад, в наступному фрагменті коду ми намагаємось знайти всі рейси в Січні і Лютому:
 
 ```{r}
 flights |> 
   filter(month == c(1, 2))
 ```
 
-The code runs without error, but it doesn't return what you want.
-Because of the recycling rules it finds flights in odd numbered rows that departed in January and flights in even numbered rows that departed in February.
-And unfortunately there's no warning because `flights` has an even number of rows.
+Код виконується без помилок, але вивід не є тим, що ми хотіли.
 
-To protect you from this type of silent failure, most tidyverse functions use a stricter form of recycling that only recycles single values.
-Unfortunately that doesn't help here, or in many other cases, because the key computation is performed by the base R function `==`, not `filter()`.
+Внаслідок правил рециркуляції цей код знаходить рейси в непарних рядках, які відправились в Січні і рейси в парних рядках, які відправились в Лютому.
+На жаль, попередження не було, тому що датафрейм `flights` має парну кількість рядків.
+
+Для того, щоб захистити користувачів від таких мовчазних помилок, більшість функції tidyverse має суворіший спосіб рециркуляції, такий що тільки окремі значення рециркулюються.
+На жаль, цей механізм не допомогає в цій ситуації, і також в багатьої інших, тому що ключове обчислення виконується функцієй `==`  базового R, а не `filter()`.
 
 ### Мінімум і максимум
 
-The arithmetic functions work with pairs of variables.
-Two closely related functions are `pmin()` and `pmax()`, which when given two or more variables will return the smallest or largest value in each row:
+Аріфметичні функції працюють із парами змінних.
+Дві тісно пов'язані функції - це `pmin()` і `pmax()`, вони отримають на вхід одну чи більше змінних, і повертають найменше або найбільше значення в кожному рядку:
 
 ```{r}
 df <- tribble(
@@ -203,8 +199,8 @@ df |>
   )
 ```
 
-Note that these are different to the summary functions `min()` and `max()` which take multiple observations and return a single value.
-You can tell that you've used the wrong form when all the minimums and all the maximums have the same value:
+Зверніть увагу на той факт, що ці фунції відрізняються від функцій підсумовування `min()` і `max()`, які приймають на вхід багато спостережень, а повертають єдине значення.
+Ви можете побачити, що застосували не ту форму, коли всі мінімуми і максимуми мають те саме значення:
 
 ```{r}
 df |> 
@@ -216,15 +212,14 @@ df |>
 
 ### Модульна арифметика
 
-Modular arithmetic is the technical name for the type of math you did before you learned about decimal places, i.e. division that yields a whole number and a remainder.
-In R, `%/%` does integer division and `%%` computes the remainder:
+Модульна арифметика - це технічна назва математичніх операції, які ви вивчали до того, як познайомились із операціїями із рухомою комою, тобто ділення, що дає цілу частину і залишок. 
+В R, операція `%/%` виконує цілочисленне ділення, а `%%` обчислює залишок:
 
 ```{r}
 1:10 %/% 3
 1:10 %% 3
 ```
-
-Modular arithmetic is handy for the `flights` dataset, because we can use it to unpack the `sched_dep_time` variable into `hour` and `minute`:
+В датасеті `flights` за допомогою модульної арифметики ми можемо розділити змінну `sched_dep_time` на `hour` і `minute`:
 
 ```{r}
 flights |> 
@@ -235,22 +230,21 @@ flights |>
   )
 ```
 
-We can combine that with the `mean(is.na(x))` trick from @sec-logical-summaries to see how the proportion of cancelled flights varies over the course of the day.
-The results are shown in @fig-prop-cancelled.
+Додамо прийом `mean(is.na(x))` із секції @sec-logical-summaries, щоб подивитись, як пропорція скасованих рейсів змінюється протягом доби.
+Результати наведені на рисунку @fig-prop-cancelled.
 
 ```{r}
 #| label: fig-prop-cancelled
 #| fig-cap: | 
-#|   A line plot with scheduled departure hour on the x-axis, and proportion
-#|   of cancelled flights on the y-axis. Cancellations seem to accumulate
-#|   over the course of the day until 8pm, very late flights are much
-#|   less likely to be cancelled.
+#|   Лінійний графік із запланованим часом відправлення по осі X, і часткою скасованих
+#|   рейсів по осі Y. Скасування накопичуються протягом дня до 20:00, дуже пізні рейси 
+#|   скасовуються значно рідше.
 #| fig-alt: |
-#|   A line plot showing how proportion of cancelled flights changes over
-#|   the course of the day. The proportion starts low at around 0.5% at
-#|   5am, then steadily increases over the course of the day until peaking
-#|   at 4% at 7pm. The proportion of cancelled flights then drops rapidly
-#|   getting down to around 1% by midnight.
+#|   Лінійний графік показує як частка скасованих рейсів змінюється протягом доби. 
+#|   О 5:00 ранку рівень скасування починається із нізького зачення в 0.5%, потім поступово
+#|   збільшується протягом дня досягаючи піку о 19:00 вечора. Після цього частка скасованих 
+#|   рейсів швидко знижується до близько 1% опівночі.
+
 flights |> 
   group_by(hour = sched_dep_time %/% 100) |> 
   summarize(prop_cancelled = mean(is.na(dep_time)), n = n()) |> 
@@ -262,41 +256,41 @@ flights |>
 
 ### Логарифми
 
-Logarithms are an incredibly useful transformation for dealing with data that ranges across multiple orders of magnitude and converting exponential growth to linear growth.
-In R, you have a choice of three logarithms: `log()` (the natural log, base e), `log2()` (base 2), and `log10()` (base 10).
-We recommend using `log2()` or `log10()`.
-`log2()` is easy to interpret because a difference of 1 on the log scale corresponds to doubling on the original scale and a difference of -1 corresponds to halving; whereas `log10()` is easy to back-transform because (e.g.) 3 is 10\^3 = 1000.
-The inverse of `log()` is `exp()`; to compute the inverse of `log2()` or `log10()` you'll need to use `2^` or `10^`.
+Логарифми є дуже корисною транформацією для даних, які охоплюють декільта порядків величини, і перетворити експоненційний зріст в лінійний.
+В R доступні три варіанти логарифмування: `log()` (натуральний логарифм із базою e), `log2()` (база 2), і `log10()` (база 10).
+Ми радимо користуватися `log2()` і `log10()`.
+`log2()` легко інтерпретувати, тому що різниця в 1 в логарифмічній шкалі відповідає подвоєнню в оригінальних величинах, а разниця в -1 відподвідає діленню навпіл; тоді як `log10()` легко інтерпретувати, тому що 3 це 10\^3 = 1000.
+Зворотня функція для `log()` є `exp()`; щоб обчислити зворотнє значення від `log2()` або `log10()` вам знадобиться `2^` або `10^`.
 
-### Rounding {#sec-rounding}
+### Округлення {#sec-rounding}
 
-Use `round(x)` to round a number to the nearest integer:
+Щоб округлити число до найближчого цілого, задійте `round(x)`:
 
 ```{r}
 round(123.456)
 ```
 
-You can control the precision of the rounding with the second argument, `digits`.
-`round(x, digits)` rounds to the nearest `10^-n` so `digits = 2` will round to the nearest 0.01.
-This definition is useful because it implies `round(x, -3)` will round to the nearest thousand, which indeed it does:
+Точність округлення контролюється за допомогою другого аргумента, `digits`. 
+`round(x, digits)` округлює до найближчого `10^-n` так що  `digits = 2` до округлить до найближчого 0.01.
+В свою чергу `round(x, -3)` округлить на найближчої тисячі:
 
 ```{r}
-round(123.456, 2)  # two digits
-round(123.456, 1)  # one digit
-round(123.456, -1) # round to nearest ten
-round(123.456, -2) # round to nearest hundred
+round(123.456, 2)  # дві значущі цифри
+round(123.456, 1)  # одна значуща цифра
+round(123.456, -1) # округлить до найближчого десятка
+round(123.456, -2) # округлить до найближчої сотні
 ```
 
-There's one weirdness with `round()` that seems surprising at first glance:
+У фунції `round()` є одна несподіванка:
 
 ```{r}
 round(c(1.5, 2.5))
 ```
 
-`round()` uses what's known as "round half to even" or Banker's rounding: if a number is half way between two integers, it will be rounded to the **even** integer.
-This is a good strategy because it keeps the rounding unbiased: half of all 0.5s are rounded up, and half are rounded down.
+`round()` використовує "округлення до парного" або банківське округлення: якщо число знаходиться посередиці між двома цілими числами, воно буде округлене до **парного** цілого значення.
+Це є гарним підходом, тому що він неупереджений: половина всіх значень із 0.5 округлюються вгору, а половина - униз.
 
-`round()` is paired with `floor()` which always rounds down and `ceiling()` which always rounds up:
+Функція `round()` пов'язана із `floor()`, яка завжди округлює униз, та із `ceiling()`, яка завжди округлює вгору:
 
 ```{r}
 x <- 123.456
@@ -305,45 +299,44 @@ floor(x)
 ceiling(x)
 ```
 
-These functions don't have a `digits` argument, so you can instead scale down, round, and then scale back up:
+Ці функцій не мають аргументу `digits`, тож потрібно спочатку зменшити масштаб, округлити, а потім збільшити масштаб: 
 
 ```{r}
-# Round down to nearest two digits
+# Округлити униз із двома значущими числами
 floor(x / 0.01) * 0.01
-# Round up to nearest two digits
+# Округлити угору із двома значущими числами
 ceiling(x / 0.01) * 0.01
 ```
-
-You can use the same technique if you want to `round()` to a multiple of some other number:
+Такий самий прийом можна застосувати, якщо потрібно `round()` до числа кратного іншому числу:
 
 ```{r}
-# Round to nearest multiple of 4
+# Округлити до найближчого кратного до 4
 round(x / 4) * 4
 
-# Round to nearest 0.25
+# Округлити до найближчого кратного до 0.25
 round(x / 0.25) * 0.25
 ```
 
-### Cutting numbers into ranges
+### Розбиття числових векторів на діапазони
 
-Use `cut()`[^numbers-1] to break up (aka bin) a numeric vector into discrete buckets:
+Щоб розбити числовий вектор на дискретні групи, застосуйте функцію `cut()`[^numbers-1]:
 
-[^numbers-1]: ggplot2 provides some helpers for common cases in `cut_interval()`, `cut_number()`, and `cut_width()`.
-    ggplot2 is an admittedly weird place for these functions to live, but they are useful as part of histogram computation and were written before any other parts of the tidyverse existed.
+[^numbers-1]: бібліотека ggplot2 надає допоміжні функції `cut_interval()`, `cut_number()`, and `cut_width()`.
+    ggplot2 є чудернацьким місцем, щоб зберігати ці функції, але вони корисні для обчислення гістограм, і вони були написані ще до інших частнин tidyverse.
 
 ```{r}
 x <- c(1, 2, 5, 10, 15, 20)
 cut(x, breaks = c(0, 5, 10, 15, 20))
 ```
 
-The breaks don't need to be evenly spaced:
+Розриви не мають бути розподілени рівномірно:
 
 ```{r}
 cut(x, breaks = c(0, 5, 10, 100))
 ```
 
-You can optionally supply your own `labels`.
-Note that there should be one less `labels` than `breaks`.
+За бажання можна задавати власні `labels`.
+Кількість `labels` повинна бути на одну менше ніж `breaks`.
 
 ```{r}
 cut(x, 
@@ -352,38 +345,38 @@ cut(x,
 )
 ```
 
-Any values outside of the range of the breaks will become `NA`:
+Будь-які значення за межами інтервалів стають `NA`:
 
 ```{r}
 y <- c(NA, -10, 5, 10, 30)
 cut(y, breaks = c(0, 5, 10, 15, 20))
 ```
 
-See the documentation for other useful arguments like `right` and `include.lowest`, which control if the intervals are `[a, b)` or `(a, b]` and if the lowest interval should be `[a, b]`.
+В документації описані інші корисні аргументи, такі як `right` і `include.lowest`, які контролюють, що інтервали визначаються як `[a, b)` або `(a, b]` і чи нижчий інтервал повинен бути `[a, b]`.
 
-### Cumulative and rolling aggregates {#sec-cumulative-and-rolling-aggregates}
+### Кумулятивні і рухомі агрегації {#sec-cumulative-and-rolling-aggregates}
 
-Base R provides `cumsum()`, `cumprod()`, `cummin()`, `cummax()` for running, or cumulative, sums, products, mins and maxes.
-dplyr provides `cummean()` for cumulative means.
-Cumulative sums tend to come up the most in practice:
+Базовий R запроваджує функції `cumsum()`, `cumprod()`, `cummin()`, `cummax()` для поточних, або кумулятивних підсумків, добутків, мінімальних і максимальних значень.
+Бібліотека dplyr запроваждує `cummean()` для кумулятивних середніх.
+Найчастіше застосовуються кумулятивні підсумки:
 
 ```{r}
 x <- 1:10
 cumsum(x)
 ```
 
-If you need more complex rolling or sliding aggregates, try the [slider](https://slider.r-lib.org/) package.
+Для більш складних агрегації із ковзаючим вікном є пакет [slider](https://slider.r-lib.org/).
 
-### Exercises
+### Вправи
 
-1.  Explain in words what each line of the code used to generate @fig-prop-cancelled does.
+1.  Поясніть, що робить кожен рядок коду, який генерує рисунок @fig-prop-cancelled.
 
-2.  What trigonometric functions does R provide?
-    Guess some names and look up the documentation.
-    Do they use degrees or radians?
+2.  Які тригономертичні функції є в R?
+    Пригадайте деякі назви і пошукайте в документації.
+    Чи вони використовують градуси чи радіани?
 
-3.  Currently `dep_time` and `sched_dep_time` are convenient to look at, but hard to compute with because they're not really continuous numbers.
-    You can see the basic problem by running the code below: there's a gap between each hour.
+3.  Наразі стовпчики `dep_time` і `sched_dep_time` є зручними для перегляду, але не для обчислень, тому що вони не є безперервними числами.
+    Ви можете побачити проблему, якщо запустите наступний код: у виводі є розрив між кожною годиною.
 
     ```{r}
     #| eval: false
@@ -393,11 +386,11 @@ If you need more complex rolling or sliding aggregates, try the [slider](https:/
       geom_point()
     ```
 
-    Convert them to a more truthful representation of time (either fractional hours or minutes since midnight).
+    Перетворіть ці змінні на більш коректне представлення часу (дрібні години або мінути після опівночі).
 
-4.  Round `dep_time` and `arr_time` to the nearest five minutes.
+4.  Округліть `dep_time` і `arr_time` до найближчих п'яти хвилин.
 
-## General transformations
+## Загальні трансформації
 
 The following sections describe some general transformations which are often used with numeric vectors, but can be applied to all other column types.
 
@@ -565,12 +558,12 @@ df |>
 8.  Find all destinations that are flown by at least two carriers.
     Use those destinations to come up with a relative ranking of the carriers based on their performance for the same destination.
 
-## Numeric summaries
+## Числові підсумки
 
 Just using the counts, means, and sums that we've introduced already can get you a long way, but R provides many other useful summary functions.
 Here is a selection that you might find useful.
 
-### Center
+### Центр даних
 
 So far, we've mostly used `mean()` to summarize the center of a vector of values.
 As we've seen in @sec-sample-size, because the mean is the sum divided by the count, it is sensitive to even just a few unusually high or low values.
@@ -612,7 +605,7 @@ For these reasons, the mode tends not to be used by statisticians and there's no
 
 [^numbers-2]: The `mode()` function does something quite different!
 
-### Minimum, maximum, and quantiles {#sec-min-max-summary}
+### Мінімум, максимум і квантилі {#sec-min-max-summary}
 
 What if you're interested in locations other than the center?
 `min()` and `max()` will give you the largest and smallest values.
@@ -651,7 +644,7 @@ flights |>
   filter(distance_iqr > 0)
 ```
 
-### Distributions
+### Розподіли
 
 It's worth remembering that all of the summary statistics described above are a way of reducing the distribution down to a single number.
 This means that they're fundamentally reductive, and if you pick the wrong summary, you can easily miss important differences between groups.
@@ -771,7 +764,7 @@ For example:
     Can you find any evidence that the airport moved locations?
     Can you find another variable that might explain the difference?
 
-## Summary
+## Підсумки
 
 You're already familiar with many tools for working with numbers, and after reading this chapter you now know how to use them in R.
 You've also learned a handful of useful general transformations that are commonly, but not exclusively, applied to numeric vectors like ranks and offsets.
