@@ -558,31 +558,29 @@ df |>
 
 ## Числові підсумки
 
-Just using the counts, means, and sums that we've introduced already can get you a long way, but R provides many other useful summary functions.
-Here is a selection that you might find useful.
+За допомогою лічильників, середніх і сум, які ми вже розглянули, вже можна зробити чимало, але R містить і багато інших функцій підсумовування.
+Нижче представлений набір функцій, які можуть вам стати в нагоді.
 
 ### Центр даних
 
-So far, we've mostly used `mean()` to summarize the center of a vector of values.
-As we've seen in @sec-sample-size, because the mean is the sum divided by the count, it is sensitive to even just a few unusually high or low values.
-An alternative is to use the `median()`, which finds a value that lies in the "middle" of the vector, i.e. 50% of the values are above it and 50% are below it.
-Depending on the shape of the distribution of the variable you're interested in, mean or median might be a better measure of center.
-For example, for symmetric distributions we generally report the mean while for skewed distributions we usually report the median.
+До сих пір, ми здебільшого знаходили центр вектора значень за допомогою функції середнього `mean()`, 
+Як ми вже бачили в розділі @sec-sample-size, оскільки середнє є сумою значень поділеною на кількість спостережень, воно сильно залежить навідь від декількох дуже високих чи низьких значень (викидів). 
+Альтернативою є використання медіани `median()`, яка знаходить значення, яке ділить вектор значень навпіл, тобто 50% значень більше медіани, а 50% - менше.
+Середнє або медіана можуть бути кращою мірою центра в залежності від форми розподілу змінної,.
+Наприклад, для симетричних розподілів ми зазвичай наводимо середнє, а для асиметричних - медіану.
 
-@fig-mean-vs-median compares the mean vs. the median departure delay (in minutes) for each destination.
-The median delay is always smaller than the mean delay because flights sometimes leave multiple hours late, but never leave multiple hours early.
+На рисунку @fig-mean-vs-median наведено залежність медіани затримки від середнього затримки (в хвилинах) для кожного пункта призначення.
+Медіана затримки завжди менше ніж середнє, тому що рейси інколи відправляються багато годин пізніше, але ніколи не відправляються багато годин раніше.
 
 ```{r}
 #| label: fig-mean-vs-median
 #| fig-cap: |
-#|   A scatterplot showing the differences of summarizing daily departure
-#|   delay with median instead of mean.
+#|   Діаграма розсіювання, що порівнює характеристику щоденних затримок медіаною і середнім.
 #| fig-alt: |
-#|   All points fall below a 45° line, meaning that the median delay is
-#|   always less than the mean delay. Most points are clustered in a 
-#|   dense region of mean [0, 20] and median [-5, 5]. As the mean delay
-#|   increases, the spread of the median also increases. There are two
-#|   outlying points with mean ~60, median ~30, and mean ~85, median ~55.
+#|   Всі точки потрапляють нижче лінії в 45°, тобто медіана затримки завжди менша за середнє. 
+#|   Більшість точок скупчена в області інтервалу середнього [0, 20] і медіани [-5, 5]. As the mean delay
+#|   Із збільшенням середнього зростає розкид медіани. There are two
+#|   Два викиди: середнє ~60, медіана ~30, і середнє ~85, медіана ~55.
 flights |>
   group_by(year, month, day) |>
   summarize(
@@ -596,20 +594,18 @@ flights |>
   geom_point()
 ```
 
-You might also wonder about the **mode**, or the most common value.
-This is a summary that only works well for very simple cases (which is why you might have learned about it in high school), but it doesn't work well for many real datasets.
-If the data is discrete, there may be multiple most common values, and if the data is continuous, there might be no most common value because every value is ever so slightly different.
-For these reasons, the mode tends not to be used by statisticians and there's no mode function included in base R[^numbers-2].
+Ви також можете пригади поняття **моди**, тобто найбільш поширеного значення.
+Це є характеристикою, яка добре працює тільки у дуже простих випадках (саме тому ви могли вивчати її в школі), але вона не підходить для багатьох реальних датасетів.
+Якщо дані є дискретними, може буди багато поширених значень, а якщо дані безперервні, то може і взагалі не бути поширеного значення, оскільки кожне значення трошки відрізняється від інших. За цих причин статистики не використовують моду, і в базовому R нема відповідної функції[^numbers-2].
 
-[^numbers-2]: The `mode()` function does something quite different!
+[^numbers-2]: Фунція `mode()` робить щось інше!
 
 ### Мінімум, максимум і квантилі {#sec-min-max-summary}
 
-What if you're interested in locations other than the center?
-`min()` and `max()` will give you the largest and smallest values.
-Another powerful tool is `quantile()` which is a generalization of the median: `quantile(x, 0.25)` will find the value of `x` that is greater than 25% of the values, `quantile(x, 0.5)` is equivalent to the median, and `quantile(x, 0.95)` will find the value that's greater than 95% of the values.
+Якщо вас цікавлять інші характеристики, а не тільки центр даних, функції `min()` і `max()` нададуть вам найменше і найбільше значення.
+Функція `quantile()` є узагальненям медіани: `quantile(x, 0.25)` знайде значення, яке є більшим ніж 25% всіх значень, `quantile(x, 0.5)` дорівнює медіані, і `quantile(x, 0.95)` знайде значення, яке є більшим ніж 95% всіх значень.
 
-For the `flights` data, you might want to look at the 95% quantile of delays rather than the maximum, because it will ignore the 5% of most delayed flights which can be quite extreme.
+У датасеті `flights`,  95% квантиль затримок рейсів є більш інформативним ніж максимум, тому що він ігнорує 5% рейсів із найбільшою затримкою, які можуть мати дуже великі (екстремальні) значення затримки.
 
 ```{r}
 flights |>
@@ -621,15 +617,15 @@ flights |>
   )
 ```
 
-### Spread
+### Розкид
 
-Sometimes you're not so interested in where the bulk of the data lies, but in how it is spread out.
-Two commonly used summaries are the standard deviation, `sd(x)`, and the inter-quartile range, `IQR()`.
-We won't explain `sd()` here since you're probably already familiar with it, but `IQR()` might be new --- it's `quantile(x, 0.75) - quantile(x, 0.25)` and gives you the range that contains the middle 50% of the data.
+Інколи вам потрібно знайти не де розташована більшість даних, а як саме дані розкидані.
+Дві найбільш поширені метрики це стандартне відхилення `sd(x)` та міжквартильний розмах `IQR()`.
+Ми не будемо пояснювати `sd()`, тому що ви ймовірно знайомі з цією метрикою, а ось `IQR()` може бути новим поняттям  --- це `quantile(x, 0.75) - quantile(x, 0.25)` і він означає інтервал, який містить середні 50% значень.
 
-We can use this to reveal a small oddity in the `flights` data.
-You might expect the spread of the distance between origin and destination to be zero, since airports are always in the same place.
-But the code below reveals a data oddity for airport [EGE](https://en.wikipedia.org/wiki/Eagle_County_Regional_Airport):
+Тут ми можено знайти маленьку проблемо в датасеті `flights`.
+Можна очікувати, що розкид відстаней між пунктами відправлення і призначення дорівнює нулю, тому що аєропорти зажди знаходяться в тому ж самому місці.
+Але наступний код знаходить проблему для аєропорту [EGE](https://en.wikipedia.org/wiki/Eagle_County_Regional_Airport):
 
 ```{r}
 flights |> 
@@ -747,7 +743,7 @@ For example:
 -   `(x - min(x)) / (max(x) - min(x))` standardizes to range \[0, 1\].
 -   `x / first(x)` computes an index based on the first observation.
 
-### Exercises
+### Вправи
 
 1.  Brainstorm at least 5 different ways to assess the typical delay characteristics of a group of flights.
     When is `mean()` useful?
