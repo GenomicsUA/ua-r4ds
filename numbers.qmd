@@ -392,26 +392,26 @@ cumsum(x)
 
 ## Загальні трансформації
 
-The following sections describe some general transformations which are often used with numeric vectors, but can be applied to all other column types.
+В наступних секціях описані деякі загальні трансформації, які часто застосовуються саме до числових векторів, але які можна вжити і для стопчиків будь-яких інших типів.
 
-### Ranks
+### Ранги
 
-dplyr provides a number of ranking functions inspired by SQL, but you should always start with `dplyr::min_rank()`.
-It uses the typical method for dealing with ties, e.g., 1st, 2nd, 2nd, 4th.
+Пакет dplyr містить декілька функцій ранжування, подібних до функцій SQL, але насамперед починайте з функції `dplyr::min_rank()`.
+Вона використовує типовий спосіб обробки однакових значень: в наступному прикладі ранги є 1-й, 2-й, 2-й, 4-й.
 
 ```{r}
 x <- c(1, 2, 2, 3, 4, NA)
 min_rank(x)
 ```
 
-Note that the smallest values get the lowest ranks; use `desc(x)` to give the largest values the smallest ranks:
+Найменше значення отримує найменший ранг. Щоб надати найбільшим значенням найменші ранги, застосуйте `desc(x)`:
 
 ```{r}
 min_rank(desc(x))
 ```
 
-If `min_rank()` doesn't do what you need, look at the variants `dplyr::row_number()`, `dplyr::dense_rank()`, `dplyr::percent_rank()`, and `dplyr::cume_dist()`.
-See the documentation for details.
+Якщо функція `min_rank()` не задовольняє ваші потреби, подивіться на альтернативні функції `dplyr::row_number()`, `dplyr::dense_rank()`, `dplyr::percent_rank()`, і `dplyr::cume_dist()`.
+Подробиці в документації.
 
 ```{r}
 df <- tibble(x = x)
@@ -424,11 +424,11 @@ df |>
   )
 ```
 
-You can achieve many of the same results by picking the appropriate `ties.method` argument to base R's `rank()`; you'll probably also want to set `na.last = "keep"` to keep `NA`s as `NA`.
+Багато з цих результатів можна отримати і за допомогою аргумента `ties.method` функції `rank()` базового R. Також варто встановити `na.last = "keep"`, щоб значення `NA` не отримували числового рангу, а отримували ранг `NA`.
 
-`row_number()` can also be used without any arguments when inside a dplyr verb.
-In this case, it'll give the number of the "current" row.
-When combined with `%%` or `%/%` this can be a useful tool for dividing data into similarly sized groups:
+Функцію `row_number()` можна вжити без аргументів всередині будь-якого виклику функції dplyr.
+Вона поверне номер поточного рядка (row).
+Якщо додати оператори `%%` або `%/%`, то можна розділити дані на групи приблизно однакового розміру:
 
 ```{r}
 df <- tibble(id = 1:10)
@@ -441,10 +441,11 @@ df |>
   )
 ```
 
-### Offsets
+### Зміщення (offsets)
 
-`dplyr::lead()` and `dplyr::lag()` allow you to refer to the values just before or just after the "current" value.
-They return a vector of the same length as the input, padded with `NA`s at the start or end:
+Функції `dplyr::lead()` і `dplyr::lag()` дозволяють отримати значення, розташоване після або перед поточним елементом вектора
+(для кожного елемента вектора це буде своє унікальне значення).
+Вони повертають вектор таєї самої довжини, але доповнений значеннями `NA`s спочатку, або в кінці:
 
 ```{r}
 x <- c(2, 5, 11, 11, 19, 35)
@@ -452,25 +453,25 @@ lag(x)
 lead(x)
 ```
 
--   `x - lag(x)` gives you the difference between the current and previous value.
+-   `x - lag(x)` обчислює різницю між поточним і попередням значеннями.
 
     ```{r}
     x - lag(x)
     ```
 
--   `x == lag(x)` tells you when the current value changes.
+-   `x == lag(x)` з'ясовує, чи поточне значення змінилося, порівняно із попереднім.
 
     ```{r}
     x == lag(x)
     ```
 
-You can lead or lag by more than one position by using the second argument, `n`.
+Можна зміщувати більше ніж на одну позицію за допомогою другого аргумента, `n`.
 
-### Consecutive identifiers
+### Послідовні ідентифікатори
 
-Sometimes you want to start a new group every time some event occurs.
-For example, when you're looking at website data, it's common to want to break up events into sessions, where you begin a new session after a gap of more than `x` minutes since the last activity.
-For example, imagine you have the times when someone visited a website:
+Іноді потрібно починати відлік спочатку кожного разу, коли трапляється певна подія.
+Наприклад, коли ви аналізуєте дані відвідування вебсайту, часто бажано розбити події на сесії, де нова сесія починається після перерви в `x` хвилин після останньої дії.
+Уявимо, що в нас є таймінги відвідувань сайту:
 
 ```{r}
 events <- tibble(
@@ -479,7 +480,7 @@ events <- tibble(
 
 ```
 
-And you've computed the time between each event, and figured out if there's a gap that's big enough to qualify:
+Ми підрахували інтервали між діями, і з'ясували, чи є достатьо великий проміжок, щоб почати нову сесію:
 
 ```{r}
 events <- events |> 
@@ -490,8 +491,8 @@ events <- events |>
 events
 ```
 
-But how do we go from that logical vector to something that we can `group_by()`?
-`cumsum()`, from @sec-cumulative-and-rolling-aggregates, comes to the rescue as gap, i.e. `has_gap` is `TRUE`, will increment `group` by one (@sec-numeric-summaries-of-logicals):
+Але як із цього логічного вектора отримати змінну для фукнції `group_by()`?
+Допомагає фунція `cumsum()` (див. розділ @sec-cumulative-and-rolling-aggregates): кожне значення `TRUE` у `has_gap` додає 1 до лічильника групи (group) (див. також розділ @sec-numeric-summaries-of-logicals):
 
 ```{r}
 events |> mutate(
@@ -499,8 +500,8 @@ events |> mutate(
 )
 ```
 
-Another approach for creating grouping variables is `consecutive_id()`, which starts a new group every time one of its arguments changes.
-For example, inspired by [this stackoverflow question](https://stackoverflow.com/questions/27482712), imagine you have a data frame with a bunch of repeated values:
+Інший спосіб створити змінну для групування - це функція `consecutive_id()`, яка починає нову групу кожного разу, коли змінюється значення аргументу.
+В наступному прикладі, який походить із [цього питання на сайті stackoverflow](https://stackoverflow.com/questions/27482712), уявимо датафрейм, в якому значення повторюються:
 
 ```{r}
 df <- tibble(
@@ -509,7 +510,7 @@ df <- tibble(
 )
 ```
 
-If you want to keep the first row from each repeated `x`, you could use `group_by()`, `consecutive_id()`, and `slice_head()`:
+Якщо ви хочете залишити тільки перший рядок (row) для кожного унікального значення `x`, можна застосувати функції `group_by()`, `consecutive_id()`, і `slice_head()`:
 
 ```{r}
 df |> 
@@ -517,24 +518,23 @@ df |>
   slice_head(n = 1)
 ```
 
-### Exercises
+### Вправи
 
-1.  Find the 10 most delayed flights using a ranking function.
-    How do you want to handle ties?
-    Carefully read the documentation for `min_rank()`.
+1.  За допомогою функції ранжування знайдіть 10 рейсів із найбільшою затримкою.
+    Як ви будете обробляти рейси із однаковими затримками?
+    Уважно передивіться документацію функції `min_rank()`.
 
-2.  Which plane (`tailnum`) has the worst on-time record?
+2.  Який літак (за `tailnum`) має рекорд найдовшої затримки?
 
-3.  What time of day should you fly if you want to avoid delays as much as possible?
+3.  У який час доби краще летіти, щоб уникнути затримок?
 
-4.  What does `flights |> group_by(dest) |> filter(row_number() < 4)` do?
-    What does `flights |> group_by(dest) |> filter(row_number(dep_delay) < 4)` do?
+4.  Що робить код `flights |> group_by(dest) |> filter(row_number() < 4)`?
+    Що робить код `flights |> group_by(dest) |> filter(row_number(dep_delay) < 4)`?
 
-5.  For each destination, compute the total minutes of delay.
-    For each flight, compute the proportion of the total delay for its destination.
+5.  Для кожного пункту призначення окремо, підрахуйте загальну кількість хвилин затримки рейсів.
+    Для кожного рейсу, підрахуйте частку затрими від загального значення для пункту призначення.
 
-6.  Delays are typically temporally correlated: even once the problem that caused the initial delay has been resolved, later flights are delayed to allow earlier flights to leave.
-    Using `lag()`, explore how the average flight delay for an hour is related to the average delay for the previous hour.
+6.  Зазвичай затримки мають часову кореляцію: навіть якщо проблему, яка призвела до першої затримки, вирішено, пізніші рейси затримуються, щоб дозволити вилітіти рейсам, які були заплановні раніше. За допомогою функції `lag()`, дослідіть, яким чином сердня затримка рейсів за годину пов'язана із цим покажчиком за попередню годину.
 
     ```{r}
     #| results: false
@@ -550,13 +550,11 @@ df |>
       filter(n > 5)
     ```
 
-7.  Look at each destination.
-    Can you find flights that are suspiciously fast (i.e. flights that represent a potential data entry error)?
-    Compute the air time of a flight relative to the shortest flight to that destination.
-    Which flights were most delayed in the air?
-
-8.  Find all destinations that are flown by at least two carriers.
-    Use those destinations to come up with a relative ranking of the carriers based on their performance for the same destination.
+7.  Розглянемо кожен пунк призначення окремо. Чи можна знайти надзвичайно швидкі рейси (тобто ймовірні помилки у вводі даних).
+    Обчисліть час польоту для рейсу відносно до найкоротшого рейсу до даного пункту призначення. Які рейси були найбільше затримані вже під час польоту?
+    
+8.  Знайдіть всі пункти призначення, які обслуговуються щонайменше двома авіакомпаніями.
+    За допомогою цих пунктів призначення (які визначають пари авіакомпаній) розробіть відносний ранг авіакомпаній за ефективністю, яку можна виміряти на основі рейсів авіакомпаній до того ж самого пункту призначення.
 
 ## Числові підсумки
 
