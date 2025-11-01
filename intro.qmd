@@ -6,28 +6,28 @@
 source("_common.R")
 ```
 
-Data science is an exciting discipline that allows you to transform raw data into understanding, insight, and knowledge.
-The goal of "R for Data Science" is to help you learn the most important tools in R that will allow you to do data science efficiently and reproducibly, and to have some fun along the way 😃.
-After reading this book, you'll have the tools to tackle a wide variety of data science challenges using the best parts of R.
+Наука про дані — це захоплююча дисципліна, яка дозволяє перетворювати необроблені дані для їх розуміння та створення нових знань
+Ціль книги «R for Data Science» — допомогти вам освоїти найважливіші інструменти мови R, які дозволять ефективно та відтворювано займатися наукою про дані, а також отримувати задоволення від цього процесу 😃.
+Після прочитання цієї книги, ви отримаєте інструменти для вирішення широкого спектру завдань у галузі наук про дані, використовуючи найкращі можливості мови R.
 
-## What you will learn
+## Що ви навчитеся
 
-Data science is a vast field, and there's no way you can master it all by reading a single book.
-This book aims to give you a solid foundation in the most important tools and enough knowledge to find the resources to learn more when necessary.
-Our model of the steps of a typical data science project looks something like @fig-ds-diagram.
+Наука про дані — це величезна галузь, і неможливо опанувати її повністю, прочитавши лише одну книгу.
+Ця книга має на меті надати вам міцну основу в найважливіших інструментах та достатньо знань, щоб знайти ресурси для подальшого навчання, коли це буде необхідно.
+Наша модель етапів типового проекту з науки про дані виглядає приблизно так, як показано на @fig-ds-diagram.
 
 ```{r}
 #| label: fig-ds-diagram
 #| echo: false
 #| fig-cap: |
-#|   In our model of the data science process, you start with data import
-#|   and tidying. Next, you understand your data with an iterative cycle of
-#|   transforming, visualizing, and modeling. You finish the process 
-#|   by communicating your results to other humans.
+#|   У нашій моделі процесу обробки даних ви починаєте з імпорту даних
+#|   та їх упорядкування. Далі ви розумієте свої дані за допомогою повторюваного циклу
+#|   перетворення, візуалізації та моделювання. Ви завершуєте процес 
+#|   шляхом повідомлення своїх результатів іншим людям.
 #| fig-alt: |
-#|   A diagram displaying the data science cycle: Import -> Tidy -> Understand 
-#|   (which has the phases Transform -> Visualize -> Model in a cycle) -> 
-#|   Communicate. Surrounding all of these is Program.
+#|   Діаграма, що відображає цикл науки про дані: Імпорт -> Упорядкування -> Розуміння 
+#|   (який має фази Трансформація -> Візуалізація -> Моделювання в циклі) -> 
+#|   Комунікація. Все це оточує Програма.
 #| out.width: NULL
 
 knitr::include_graphics("diagrams/data-science/base.png", dpi = 270)
