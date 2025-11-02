@@ -40,14 +40,14 @@ knitr::include_graphics("diagrams/data-science/base.png", dpi = 270)
 Після імпорту даних, хорошим кроком буде **упорядкувати** їх (tidy).
 Впорядкування даних означає їх зберігання в узгодженій формі, яка відповідає семантиці набору даних та способу їх зберігання.
 Коротко кажучи, коли ваші дані впорядковані, кожен стовпець є змінною, а кожен рядок — спостереженням.
-Упорядковані дані важливі, оскільки їхня послідовна структура дозволяє зосередити зусилля на відповідях на питання щодо даних, а не на боротьбі за те, щоб надати даним правильну форму для різних функцій.
+Упорядковані дані важливі, оскільки їхня послідовна структура дозволяє зосередити зусилля на відповідях на питання щодо даних, а не на намаганні надати даним правильну форму для різних функцій.
 
-Once you have tidy data, a common next step is to **transform** it.
-Transformation includes narrowing in on observations of interest (like all people in one city or all data from the last year), creating new variables that are functions of existing variables (like computing speed from distance and time), and calculating a set of summary statistics (like counts or means).
-Together, tidying and transforming are called **wrangling** because getting your data in a form that's natural to work with often feels like a fight!
+Після того, як ви упорядкували дані, наступним кроком зазвичай є їх **трансформація** (transform).
+Трансформація включає звуження кола спостережень, що представляють інтерес (наприклад, усі люди з одного міста або всі дані за останній рік), створення нових змінних що є функціями існуючих змінних (наприклад, обчислення швидкості з відстані та часу), обчислення підсумкових статистик, таких як кількість записів або середні значення.
+Разом, упорядкування та трансформація називаються **wrangling** або суперечкою, тому що приведення даних у форму, з якою зручно працювати, часто здається боротьбою!
 
-Once you have tidy data with the variables you need, there are two main engines of knowledge generation: visualization and modeling.
-These have complementary strengths and weaknesses, so any real data analysis will iterate between them many times.
+Як тільки ви отримаєте упорядковані дані з необхідними змінними, існує два основних механізми генерації знань: візуалізація та моделювання.
+Вони мають взаємодоповнюючі сильні та слабкі сторони, тому будь-який реальний аналіз даних буде багаторазово повторюватися між ними.
 
 **Visualization** is a fundamentally human activity.
 A good visualization will show you things you did not expect or raise new questions about the data.
