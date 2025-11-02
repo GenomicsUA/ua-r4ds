@@ -51,8 +51,8 @@ knitr::include_graphics("diagrams/data-science/base.png", dpi = 270)
 
 **Візуалізація** є фундаментально людською діяльністю.
 Хороша візуалізація покаже вам те, чого ви не очікували, або підніме нові питання щодо даних.
-A good visualization might also hint that you're asking the wrong question or that you need to collect different data.
-Visualizations can surprise you, but they don't scale particularly well because they require a human to interpret them.
+Хороша візуалізація також може вказати на те, що ви ставите неправильне питання або що вам потрібно зібрати інші дані.
+Візуалізації можуть вас здивувати, але вони не дуже добре масштабуються, оскільки потребують людини для інтерпретації.
 
 **Models** are complementary tools to visualization.
 Once you have made your questions sufficiently precise, you can use a model to answer them.
