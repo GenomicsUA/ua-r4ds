@@ -49,8 +49,8 @@ knitr::include_graphics("diagrams/data-science/base.png", dpi = 270)
 Як тільки ви отримаєте упорядковані дані з необхідними змінними, існує два основних механізми генерації знань: візуалізація та моделювання.
 Вони мають взаємодоповнюючі сильні та слабкі сторони, тому будь-який реальний аналіз даних буде багаторазово повторюватися між ними.
 
-**Visualization** is a fundamentally human activity.
-A good visualization will show you things you did not expect or raise new questions about the data.
+**Візуалізація** є фундаментально людською діяльністю.
+Хороша візуалізація покаже вам те, чого ви не очікували, або підніме нові питання щодо даних.
 A good visualization might also hint that you're asking the wrong question or that you need to collect different data.
 Visualizations can surprise you, but they don't scale particularly well because they require a human to interpret them.
 
