@@ -54,12 +54,12 @@ knitr::include_graphics("diagrams/data-science/base.png", dpi = 270)
 Хороша візуалізація також може вказати на те, що ви ставите неправильне питання або що вам потрібно зібрати інші дані.
 Візуалізації можуть вас здивувати, але вони не дуже добре масштабуються, оскільки потребують людини для інтерпретації.
 
-**Models** are complementary tools to visualization.
-Once you have made your questions sufficiently precise, you can use a model to answer them.
-Models are fundamentally mathematical or computational tools, so they generally scale well.
-Even when they don't, it's usually cheaper to buy more computers than it is to buy more brains!
-But every model makes assumptions, and by its very nature, a model cannot question its own assumptions.
-That means a model cannot fundamentally surprise you.
+**Моделі** є додатковими інструментами до візуалізації.
+Як тільки ви достатньо точно сформулюєте свої запитання, ви можете використати модель для відповіді на них.
+Моделі в своїй основі є математичними або обчислювальними інструментами, тому вони зазвичай добре масштабуються.
+Навіть коли ні, зазвичай дешевше купити більше комп'ютерів, ніж більше мізків!
+Але кожна модель робить припущення, і за своєю природою модель не може ставити під сумнів власні припущення.
+Це означає, що модель не може вас принципово здивувати.
 
 The last step of data science is **communication**, an absolutely critical part of any data analysis project.
 It doesn't matter how well your models and visualization have led you to understand the data unless you can also communicate your results to others.
