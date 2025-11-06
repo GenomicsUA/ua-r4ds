@@ -61,16 +61,16 @@ knitr::include_graphics("diagrams/data-science/base.png", dpi = 270)
 Але кожна модель робить припущення, і за своєю природою модель не може ставити під сумнів власні припущення.
 Це означає, що модель не може вас принципово здивувати.
 
-The last step of data science is **communication**, an absolutely critical part of any data analysis project.
-It doesn't matter how well your models and visualization have led you to understand the data unless you can also communicate your results to others.
+Останній етап науки про дані — це **комунікація**, абсолютно важлива частина будь-якого проекту з аналізу даних.
+Не має значення, наскільки добре ваші моделі та візуалізація допомогли вам зрозуміти дані, якщо ви не можете донести свої результати до інших.
 
-Surrounding all these tools is **programming**.
-Programming is a cross-cutting tool that you use in nearly every part of a data science project.
-You don't need to be an expert programmer to be a successful data scientist, but learning more about programming pays off because becoming a better programmer allows you to automate common tasks and solve new problems with greater ease.
+Всі ці інструменти об'єднує **програмування**.
+Програмування є універсальним інструментом, який використовується практично на всіх етапах реалізації проектів у галузі науки про дані.
+Не потрібно бути експертом в програмуванні, щоб стати успішним науковцем у галузі даних. Проте, вивчення програмування приносить свої плоди, оскільки, ставши кращим програмістом, ви зможете автоматизувати типові завдання та легше вирішувати нові проблеми.
 
-You'll use these tools in every data science project, but they're not enough for most projects.
-There's a rough 80/20 rule at play: you can tackle about 80% of every project using the tools you'll learn in this book, but you'll need other tools to tackle the remaining 20%.
-Throughout this book, we'll point you to resources where you can learn more.
+Ви будете використовувати ці інструменти в кожному проекті з науки про дані, але для більшості проектів їх недостатньо.
+Існує приблизне правило 80/20: ви можете виконати близько 80% кожного проекту, використовуючи інструменти з цієї книги, але для виконання решти 20% вам знадобляться інші інструменти.
+У цій книзі ми будемо вказувати вам на ресурси, де ви зможете дізнатися більше.
 
 ## How this book is organized
 
